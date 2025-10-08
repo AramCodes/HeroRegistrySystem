@@ -148,47 +148,127 @@ public class HeroRegistrySystem {
     public String[] enterData(){
         String[] heroData = new String[9];
         System.out.println("Let's add a new Hero! Or Edit an old one...");
+        scanner.nextLine();//consumes new line leftover
 
-        scanner.nextLine();//consumes new line from double
+        while (true) {
+            System.out.print("1. Enter Hero ID (7-digit number): ");
+            System.out.print(">>> ");
+            String input = scanner.nextLine().trim();
+            if (input.matches("\\d{7}")) {
+                heroData[0] = input;
+                break;
+            } else {
+                System.out.println("❌ Invalid input. Please enter exactly 7 digits (e.g., 1234567).");
+            }
+        }
 
-        System.out.print("1. Enter Hero ID (7-digit number): ");
-        System.out.print(">>> ");
-        heroData[0] = scanner.nextLine();
+        while (true) {
+            System.out.print("2. Enter Hero Name (e.g., Aquaman): ");
+            System.out.print(">>> ");
+            String input = scanner.nextLine().trim();
+            if (!input.isEmpty()) {
+                heroData[1] = input;
+                break;
+            } else {
+                System.out.println("❌ Hero name cannot be empty.");
+            }
+        }
 
-        System.out.print("2. Enter Hero Name (e.g., Aquaman): ");
-        System.out.print(">>> ");
-        heroData[1] = scanner.nextLine();
+        while (true) {
+            System.out.print("3. Enter Real Name (e.g., Arthur Curry): ");
+            System.out.print(">>> ");
+            String input = scanner.nextLine().trim();
+            if (!input.isEmpty()) {
+                heroData[2] = input;
+                break;
+            } else {
+                System.out.println("❌ Real name cannot be empty.");
+            }
+        }
 
-        System.out.print("3. Enter Real Name (e.g., Arthur Curry): ");
-        System.out.print(">>> ");
-        heroData[2] = scanner.nextLine();
+        while (true) {
+            System.out.print("4. Enter Hero Headshot URL: ");
+            System.out.print(">>> ");
+            String input = scanner.nextLine().trim();
+            if (input.matches("^(https?|ftp)://[^\\s/$.?#].[^\\s]*$")) {
+                heroData[3] = input;
+                break;
+            } else {
+                System.out.println("❌ Invalid URL format. Please enter a valid link starting with http:// or https://");
+            }
+        }
 
-        System.out.print("4. Enter Hero Headshot URL: ");
-        System.out.print(">>> ");
-        heroData[3] = scanner.nextLine();
+        while (true) {
+            System.out.print("5. Enter Age (integer): ");
+            System.out.print(">>> ");
+            String input = scanner.nextLine().trim();
+            try {
+                int age = Integer.parseInt(input);
+                if (age > 0 && age < 200) {
+                    heroData[4] = String.valueOf(age);
+                    break;
+                } else {
+                    System.out.println("❌ Age must be between 1 and 199.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Invalid number. Please enter a whole number.");
+            }
+        }
 
-        System.out.print("5. Enter Age (integer): ");
-        System.out.print(">>> ");
-        heroData[4] = scanner.nextLine();
+        while (true) {
+            System.out.print("6. Enter Rating (decimal, e.g., 8.5): ");
+            System.out.print(">>> ");
+            String input = scanner.nextLine().trim();
+            try {
+                double rating = Double.parseDouble(input);
+                if (rating >= 0 && rating <= 10) {
+                    heroData[5] = String.valueOf(rating);
+                    break;
+                } else {
+                    System.out.println("❌ Rating must be between 0.0 and 10.0.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Invalid input. Please enter a decimal number (e.g., 7.8).");
+            }
+        }
 
-        System.out.print("6. Enter Rating (decimal): ");
-        System.out.print(">>> ");
-        heroData[5] = scanner.nextLine();
+        while (true) {
+            System.out.print("7. Is Hero Active? (true/false): ");
+            System.out.print(">>> ");
+            String input = scanner.nextLine().trim().toLowerCase();
+            if (input.equals("true") || input.equals("false")) {
+                heroData[6] = input;
+                break;
+            } else {
+                System.out.println("❌ Please type 'true' or 'false'.");
+            }
+        }
 
-        System.out.print("7. Is Hero Active? (true/false): ");
-        System.out.print(">>> ");
-        heroData[6] = scanner.nextLine();
+        while (true) {
+            System.out.print("8. Enter Hero Description: ");
+            System.out.print(">>> ");
+            String input = scanner.nextLine().trim();
+            if (!input.isEmpty()) {
+                heroData[7] = input;
+                break;
+            } else {
+                System.out.println("❌ Description cannot be empty.");
+            }
+        }
 
-        System.out.print("8. Enter Hero Description: ");
-        System.out.print(">>> ");
-        heroData[7] = scanner.nextLine();
-
-        System.out.print("9. Enter Strength Base (e.g., Agility, Intellect, etc.): ");
-        System.out.print(">>> ");
-        heroData[8] = scanner.nextLine();
+        while (true) {
+            System.out.print("9. Enter Strength Base (e.g., Agility, Intellect, etc.): ");
+            System.out.print(">>> ");
+            String input = scanner.nextLine().trim();
+            if (!input.isEmpty()) {
+                heroData[8] = input;
+                break;
+            } else {
+                System.out.println("❌ Strength base cannot be empty.");
+            }
+        }
 
         System.out.println("\n✅ Hero data entered successfully!\n");
-
         return heroData;
     }
 
@@ -660,3 +740,4 @@ public class HeroRegistrySystem {
         }
     }
 }
+

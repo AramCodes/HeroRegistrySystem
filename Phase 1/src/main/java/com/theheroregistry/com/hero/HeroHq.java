@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /* Aram Valcourt
    CEN 3024C
-   10/00/2025
+   10/07/2025
    SOFTWARE DEVELOPMENT I
    Main Class running the HRS; The HRS purpose is to enable management and registry of the Hero HQ's heroes through a
    CLI driven app to allow C.R.U.D functionality and two custom methods
