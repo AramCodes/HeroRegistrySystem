@@ -36,8 +36,6 @@ public class HeroHq {
                                                                                   |  $$$$$$/                                  |  $$$$$$/                |  $$$$$$/                                           \s
                                                                                    \\______/                                    \\______/                  \\______/                                            \s"""
 		);
-		System.out.println();
-		System.out.println();
 
 		new HeroRegistrySystem().run();
 	}

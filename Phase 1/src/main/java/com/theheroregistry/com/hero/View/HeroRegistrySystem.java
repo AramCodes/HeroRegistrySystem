@@ -24,7 +24,15 @@ public class HeroRegistrySystem {
         the return type is boolean, will return true if it reaches after print
     */
     public boolean displayMenu(){
-        System.out.println("What would you like to do today?(read, display, create, remove, update, custom, or exit)");
+        System.out.println("What would you like to do today?");
+        System.out.println("1. Read");
+        System.out.println("2. Display");
+        System.out.println("3. Create");
+        System.out.println("4. Remove ");
+        System.out.println("5. Update ");
+        System.out.println("6. Custom ");
+        System.out.println("or exit");
+
         System.out.print(">>> ");
         return true;
     }
@@ -71,7 +79,7 @@ public class HeroRegistrySystem {
         this method simply converts the Hero data into the object format used in Db and heroes' list.
         the parameters are all off the hero's attribute, during flat file execution the id will be allowed manually
         but during phase of Db integration DBMS will handle auto generation of Ids.
-        the return type is a Object, will return converted data
+        the return type is an Object, will return converted data
     */
 
     public Hero makeHero(long id, String heroName, String realName, String heroHeadshot, int age, double rating, boolean isActive, String description, String strengthBase) {
@@ -91,7 +99,7 @@ public class HeroRegistrySystem {
 
     /*
         parseHeroFromLine
-        this method simply reads Hero data  and converts it into an hero object
+        this method simply reads Hero data  and converts it into a hero object
         the parameter is a single line
 
         the return type is an Optional<Hero>, will return converted data
@@ -109,26 +117,17 @@ public class HeroRegistrySystem {
         }
 
         try {
-            long id = Long.parseLong(parts[0]);
-            String heroName = parts[1];
-            String realName = parts[2];
-            String heroHeadshot = parts[3];
-            int age = Integer.parseInt(parts[4]);
-            double rating = Double.parseDouble(parts[5]);
-            boolean isActive = Boolean.parseBoolean(parts[6]);
-            String description = parts[7];
-            String strengthBase = parts[8];
 
             Hero ParsedHero = Hero.builder()
-                    .id(id)
-                    .heroName(heroName)
-                    .realName(realName)
-                    .heroHeadshot(heroHeadshot)
-                    .age(age)
-                    .rating(rating)
-                    .isActive(isActive)
-                    .description(description)
-                    .strengthBase(strengthBase)
+                    .id(Long.parseLong(parts[0]))
+                    .heroName(parts[1])
+                    .realName(parts[2])
+                    .heroHeadshot(parts[3])
+                    .age(Integer.parseInt(parts[4]))
+                    .rating(Double.parseDouble(parts[5]))
+                    .isActive(Boolean.parseBoolean(parts[6]))
+                    .description(parts[7])
+                    .strengthBase(parts[8])
                     .build();
 
             return Optional.of(ParsedHero);
@@ -190,7 +189,7 @@ public class HeroRegistrySystem {
             System.out.print("4. Enter Hero Headshot URL: ");
             System.out.print(">>> ");
             String input = scanner.nextLine().trim();
-            if (input.matches("^(https?|ftp)://[^\\s/$.?#].[^\\s]*$")) {
+            if (input.matches("^(https?|ftp)://[^\\s/$.?#].\\S*$")) {
                 heroData[3] = input;
                 break;
             } else {
@@ -294,7 +293,7 @@ public class HeroRegistrySystem {
             writer.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error writing to file. Info: "  + e.getMessage());
         }
 
         return "done";
@@ -307,6 +306,7 @@ public class HeroRegistrySystem {
         the return type is int, the amount of items added
     */
 
+    @SuppressWarnings("DuplicateExpressions")
     public int batchUpload(){
 
 
@@ -338,7 +338,6 @@ public class HeroRegistrySystem {
 
             Set<Hero> merged = new LinkedHashSet<>(heroes);
 
-            int before = merged.size();
             int importedCount = 0;
             int skippedMalformed = 0;
 
@@ -368,9 +367,9 @@ public class HeroRegistrySystem {
             heroes.clear();
             heroes.addAll(merged);
             overwriteOriginalFile();
-            int after = merged.size();
 
-            System.out.println("Imported " + (after - before) + " total records into the Hero Registry System" );
+            System.out.println("Imported " + (importedCount) + " total records into the Hero Registry System" );
+            System.out.println("And failed to import " + skippedMalformed + " records into the Hero Registry System");
             break;
         }
 
@@ -450,11 +449,11 @@ public class HeroRegistrySystem {
                     heroes.add(hero);
                 } catch (NumberFormatException e) {
                     System.err.println("Failed to parse number in line: " + line);
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
 
         }
 
@@ -648,15 +647,15 @@ public class HeroRegistrySystem {
         String retirementStatus = "";
 
         if (isSevenDigitAndLong(id)){
-            for (int i = 0; i < heroes.size(); i++) {
-                if (heroes.get(i).getId() == id) {
-                    heroes.get(i).setActive(!heroes.get(i).isActive());
+            for (Hero hero : heroes) {
+                if (hero.getId() == id) {
+                    hero.setActive(!hero.isActive());
                 }
 
-                if (heroes.get(i).isActive() == true ) {
-                    retirementStatus = heroes.get(i).getHeroName() + " is active and ready for action.";
+                if (hero.isActive()) {
+                    retirementStatus = hero.getHeroName() + " is active and ready for action.";
                 } else {
-                    retirementStatus = heroes.get(i).getHeroName() + " is not active, go and bother someone else.";
+                    retirementStatus = hero.getHeroName() + " is not active, go and bother someone else.";
                 }
             }
         } else {
@@ -678,7 +677,7 @@ public class HeroRegistrySystem {
             for (Hero hero : heroes) {
                 if (hero.getId() == id && hero.isActive()) {
                     message = hero.getHeroName() + " received your SOS, will be there soon";
-                } else if (hero.getId() == id && !hero.isActive()) {
+                } else if (hero.getId() == id) {
                     message = hero.getHeroName() + " received your SOS, and close the chat! that hero is retired";
                 }
             }
@@ -698,42 +697,26 @@ public class HeroRegistrySystem {
             command = scanner.nextLine().trim();
 
             switch (command.toLowerCase()) {
-                case "read" -> {
-                    batchUpload();
-                }
-                case "display" -> {
-                    displayAllHeroes();
-                }
-                case "create" -> {
+                case "1" -> batchUpload();
+                case "2" -> displayAllHeroes();
+                case "3" -> {
                     String[] parts = enterData();
 
-                    long id = Long.parseLong(parts[0]);
-                    String heroName = parts[1];
-                    String realName = parts[2];
-                    String heroHeadshot = parts[3];
-                    int age = Integer.parseInt(parts[4]);
-                    double rating = Double.parseDouble(parts[5]);
-                    boolean isActive = Boolean.parseBoolean(parts[6]);
-                    String description = parts[7];
-                    String strengthBase = parts[8];
-
-                    Hero newHero = makeHero(id, heroName, realName, heroHeadshot, age, rating, isActive, description, strengthBase);
+                    Hero newHero = makeHero(Long.parseLong(parts[0]), parts[1], parts[2], parts[3], Integer.parseInt(parts[4]), Double.parseDouble(parts[5]), Boolean.parseBoolean(parts[6]), parts[7], parts[8]);
                     addHero(newHero);
                     System.out.println("Hero named " + newHero.getHeroName() + " with Id " + newHero.getId() + " has been created.");
                 }
-                case "remove" -> {
+                case "4" -> {
                     System.out.println("What is Hero's seven digit Id?('1234567')");
                     curId = scanner.nextInt();
                     heroDelete(curId);
                 }
-                case "update" -> {
+                case "5" -> {
                     System.out.println("What is Hero's seven digit Id?('1234567')");
                     curId = scanner.nextInt();
                     heroUpdate(curId);
                 }
-                case "custom" -> {
-                    subMenu();
-                }
+                case "6" -> subMenu();
                 case "exit" -> System.out.println("Exiting the program now...");
                 default -> System.out.println("Unknown command. Try: read, display, create, remove, update, custom, or exit");
             }
