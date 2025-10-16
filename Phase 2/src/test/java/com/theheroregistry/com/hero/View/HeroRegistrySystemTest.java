@@ -32,10 +32,62 @@ class TestHeroRegistrySystem extends HeroRegistrySystem {
         }
         return false;
     }
+
+    @Override
+    public boolean heroUpdate(long id) {
+        boolean found = false;
+        boolean noneMatch = true;
+        String[] heroData = new String[9];
+
+        for (Hero h : heroes) {
+            if (h.getId() == id) {
+                noneMatch = false;
+                break;
+            }
+        }
+
+        if(noneMatch){
+            System.out.println("Hero with ID " + id + " not found.");
+            return found;
+        }
+
+        long heroId = 6295713L;
+
+        heroData[1] = "Star Girl";
+        heroData[2] = "Courtney Whitmore";
+        heroData[3] = "https://static.dc.com/dc/files/default_images/Char_Thumb_Stargirl_5eb4a5cd5ccaf7.93430787.jpg?w=384";
+        heroData[4] = "16";
+        heroData[5] = "9.8"; //changed
+        heroData[6] = "true";
+        heroData[7] = "Cosmic staff wielder who leads with optimism";
+        heroData[8] = "G.O.A.T"; //changed
+
+        Hero newHero = makeHero(heroId, heroData[1], heroData[2], heroData[3], Integer.parseInt(heroData[4]), Double.parseDouble(heroData[5]), true, heroData[7], heroData[8]);
+
+        if (isSevenDigitAndLong(id)) {
+            for (int i = 0; i < heroes.size(); i++) {
+                if (heroes.get(i).getId() == id) {
+                    heroes.set(i, newHero);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                overwriteOriginalFile();
+            }
+
+        }else {
+            System.out.println("Invalid ID. It must be 7 digits.");
+            System.out.println("What is Hero's seven digit Id?('1234567')");
+        }
+
+        return found;
+    }
 }
 
 class HeroRegistrySystemTest {
-    final private TestHeroRegistrySystem sut = new TestHeroRegistrySystem();
+    final public TestHeroRegistrySystem sut = new TestHeroRegistrySystem();
 
     Hero superman = Hero.builder()
             .id(1234567L)
@@ -51,7 +103,7 @@ class HeroRegistrySystemTest {
 
     Hero starGirl = Hero.builder()
             .id(6295713L)
-            .heroName("6295713")
+            .heroName("Star Girl")
             .realName("Courtney Whitmore")
             .heroHeadshot("https://static.dc.com/dc/files/default_images/Char_Thumb_Stargirl_5eb4a5cd5ccaf7.93430787.jpg?w=384")
             .age(16)
@@ -92,6 +144,8 @@ class HeroRegistrySystemTest {
 
     @BeforeEach
     void setUp() {
+        sut.getHeroes().clear();
+
         sut.addHero(wonderWoman);
         sut.addHero(starGirl);
     }
@@ -112,7 +166,7 @@ class HeroRegistrySystemTest {
 
 
     @Test
-    void heroDelete() {
+    void testHeroDelete() {
         assertTrue(sut.getHeroes().contains(wonderWoman), "Seed data should contain Wonder Woman");
 
         int before = sut.getHeroes().size();
@@ -123,5 +177,27 @@ class HeroRegistrySystemTest {
         List<Hero> heroes = sut.getHeroes();
         assertEquals(before - 1, heroes.size(), "Size should decrease by 1 after removal");
         assertFalse(heroes.contains(wonderWoman), "Collection should no longer contain the removed hero");
+    }
+
+    @Test
+    void heroUpdate() {
+        assertTrue(sut.getHeroes().stream().anyMatch(h -> h.getId() == starGirl.getId()));
+
+        int before = sut.getHeroes().size(); // to validate size stays same and another record wasn't just added
+
+        boolean result = sut.heroUpdate(starGirl.getId());
+
+        assertTrue(result, "Hero should be found and updated");
+
+        assertEquals(before, sut.heroes.size(), "Size should stay the same after updating");
+
+        Hero updated = sut.getHeroes().stream()
+                .filter(h -> h.getId() == starGirl.getId())
+                .findFirst()
+                .orElseThrow();
+
+        assertEquals(9.8, updated.getRating(), "Hero's should be updated");
+        assertEquals("G.O.A.T", updated.getStrengthBase(), "Hero's should be updated");
+        assertEquals("Star Girl", updated.getHeroName());
     }
 }
