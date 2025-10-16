@@ -1,6 +1,7 @@
 package com.theheroregistry.com.hero.View;
 
 import com.theheroregistry.com.hero.Model.Hero;
+import lombok.Getter;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -13,7 +14,8 @@ import java.util.stream.Stream;
 public class HeroRegistrySystem {
     private final Scanner scanner = new Scanner(System.in);
 
-    private final List<Hero> heroes = new ArrayList<>();
+    @Getter
+    protected final List<Hero> heroes = new ArrayList<>();
     private long curId; //main commission until single view
     private String command = "";
 
@@ -54,7 +56,7 @@ public class HeroRegistrySystem {
         the parameter is a long called id
         the return type is in, will return index if found -1 if not
     */
-    private int indexOfHeroById(long id) {
+    public int indexOfHeroById(long id) {
         for (int i = 0; i < heroes.size(); i++) {
             if (heroes.get(i).getId() == id) return i;
         }
