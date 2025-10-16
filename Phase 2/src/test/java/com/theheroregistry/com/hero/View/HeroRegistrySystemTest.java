@@ -84,6 +84,7 @@ class TestHeroRegistrySystem extends HeroRegistrySystem {
 
         return found;
     }
+
 }
 
 class HeroRegistrySystemTest {
@@ -108,7 +109,7 @@ class HeroRegistrySystemTest {
             .heroHeadshot("https://static.dc.com/dc/files/default_images/Char_Thumb_Stargirl_5eb4a5cd5ccaf7.93430787.jpg?w=384")
             .age(16)
             .rating(8.8)
-            .isActive(true)
+            .isActive(false)
             .description("Cosmic staff wielder who leads with optimism")
             .strengthBase("G.O.D")
             .build();
@@ -180,7 +181,7 @@ class HeroRegistrySystemTest {
     }
 
     @Test
-    void heroUpdate() {
+    void testHeroUpdate() {
         assertTrue(sut.getHeroes().stream().anyMatch(h -> h.getId() == starGirl.getId()));
 
         int before = sut.getHeroes().size(); // to validate size stays same and another record wasn't just added
@@ -199,5 +200,31 @@ class HeroRegistrySystemTest {
         assertEquals(9.8, updated.getRating(), "Hero's should be updated");
         assertEquals("G.O.A.T", updated.getStrengthBase(), "Hero's should be updated");
         assertEquals("Star Girl", updated.getHeroName());
+    }
+
+    @Test
+    void testGetAverageRating() {
+
+        double result = sut.getAverageRating();
+
+        assertEquals(9.15,result, "Hero's average rating on seeded data should b 9.15");
+
+    }
+
+    @Test
+    void testHeroRetirementToggle() {
+
+        String result = sut.heroRetirementToggle(starGirl.getId());
+
+        assertEquals("Star Girl is active and ready for action.", result, "should be ready");
+
+    }
+
+    @Test
+    void testSendingSOS() {
+
+        String result = sut.sendingSOS(starGirl.getId());
+
+        assertEquals("Star Girl received your SOS, and close the chat! that hero is retired", result, "SOS should be reject since star girl is retired");
     }
 }
