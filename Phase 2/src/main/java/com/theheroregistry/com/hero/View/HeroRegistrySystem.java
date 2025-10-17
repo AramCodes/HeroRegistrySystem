@@ -162,7 +162,6 @@ public class HeroRegistrySystem {
     public String[] enterDataForNewHero(){
         String[] heroData = new String[9];
         System.out.println("Let's add a new Hero!");
-        scanner.nextLine();//consumes new line leftover
 
         while (true) {
             System.out.print("1. Enter Hero ID (7-digit number): ");
@@ -281,8 +280,6 @@ public class HeroRegistrySystem {
                 System.out.println("❌ Strength base cannot be empty.");
             }
         }
-
-        scanner.nextLine();//consumes new line leftover
 
         System.out.println("\n✅ Hero data entered successfully!\n");
         return heroData;
@@ -298,7 +295,6 @@ public class HeroRegistrySystem {
     public String[] enterDataToUpdateHero(){
         String[] heroData = new String[9];
         System.out.println("Let's Edit a hero");
-        scanner.nextLine();//consumes new line leftover
 
         while (true) {
             System.out.print("1. Enter Hero ID (7-digit number): ");
@@ -417,8 +413,6 @@ public class HeroRegistrySystem {
                 System.out.println("❌ Strength base cannot be empty.");
             }
         }
-
-        scanner.nextLine();//consumes new line leftover
 
         System.out.println("\n✅ Hero data entered successfully!\n");
         return heroData;
@@ -463,7 +457,6 @@ public class HeroRegistrySystem {
         String input = "";
         while (!input.equalsIgnoreCase("q")) {
             System.out.print("What is Hero's seven digit Id? (e.g., 1234567 or 'q' to quit)\n>>> ");
-            input = scanner.nextLine().trim();
 
             if (input.equalsIgnoreCase("q")) {
                 System.out.println("Exiting update.");
@@ -696,7 +689,7 @@ public class HeroRegistrySystem {
             } else {
                 System.out.println("Hero with ID " + id + " not found.");
             }
-            scanner.nextLine();
+
         }else {
             System.out.println("Invalid ID. It must be 7 digits.");
             System.out.println("What is Hero's seven digit Id?('1234567')");
@@ -717,7 +710,6 @@ public class HeroRegistrySystem {
     */
 
     public boolean heroUpdate(long id) {
-        scanner.nextLine();//consumes line
         boolean found = false;
 
         String[] heroData = enterDataToUpdateHero();
@@ -751,7 +743,7 @@ public class HeroRegistrySystem {
             } else {
                 System.out.println("Hero with ID " + id + " not found.");
             }
-            scanner.nextLine();
+
         }else {
             System.out.println("Invalid ID. It must be 7 digits.");
             System.out.println("What is Hero's seven digit Id?('1234567')");
@@ -814,7 +806,6 @@ public class HeroRegistrySystem {
                 System.out.println();
                 System.out.println("⚠ Invalid input! Please enter a number between 1 and 4.");
                 System.out.println();
-                subScanner.nextLine(); // Clears the invalid input
             }
         }
 
