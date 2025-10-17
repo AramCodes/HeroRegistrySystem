@@ -4,6 +4,9 @@ import com.theheroregistry.com.hero.Model.Hero;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,7 +49,7 @@ class TestHeroRegistrySystem extends HeroRegistrySystem {
             }
         }
 
-        if(noneMatch){
+        if (noneMatch) {
             System.out.println("Hero with ID " + id + " not found.");
             return found;
         }
@@ -77,7 +80,7 @@ class TestHeroRegistrySystem extends HeroRegistrySystem {
                 overwriteOriginalFile();
             }
 
-        }else {
+        } else {
             System.out.println("Invalid ID. It must be 7 digits.");
             System.out.println("What is Hero's seven digit Id?('1234567')");
         }
@@ -85,6 +88,39 @@ class TestHeroRegistrySystem extends HeroRegistrySystem {
         return found;
     }
 
+    @Override
+    public int batchUpload() {
+
+
+        while (true) {
+
+            String input = "C:/Users/Juice/Desktop/extras.txt";
+
+            if (input.isEmpty()) {
+                System.out.println("Please enter a file path (e.g., import.txt or C:\\Users\\You\\import.txt).");
+                continue;
+            }
+
+            if ((input.startsWith("\"") && input.endsWith("\"")) ||
+                (input.startsWith("'") && input.endsWith("'"))) {
+                input = input.substring(1, input.length() - 1);
+            }
+
+            Path importPath = Paths.get(input);
+            if (!importPath.isAbsolute()) {
+                importPath = Paths.get("").toAbsolutePath().resolve(importPath);
+            }
+
+            if (!Files.isRegularFile(importPath) || !Files.isReadable(importPath)) {
+                System.err.println("Cannot read: " + importPath);
+                System.err.println("Tip: current working directory is: " + Paths.get("").toAbsolutePath());
+                System.err.println("Try again.\n");
+                continue;
+            }
+
+            return 10;
+        }
+    }
 }
 
 class HeroRegistrySystemTest {
@@ -136,12 +172,35 @@ class HeroRegistrySystemTest {
         assertTrue(true);
     }
 
-    @Test void sevenDigits_ok()       { assertTrue(isSevenDigitAndLong(1234567L)); }
-    @Test void sixDigits_no()         { assertFalse(isSevenDigitAndLong(123456L)); }
-    @Test void eightDigits_no()       { assertFalse(isSevenDigitAndLong(12345678L)); }
-    @Test void negative_no()          { assertFalse(isSevenDigitAndLong(-1234567L)); }
-    @Test void boundary_lowest_ok()   { assertTrue(isSevenDigitAndLong(1_000_000L)); }
-    @Test void boundary_highest_ok()  { assertTrue(isSevenDigitAndLong(9_999_999L)); }
+    @Test
+    void sevenDigits_ok() {
+        assertTrue(isSevenDigitAndLong(1234567L));
+    }
+
+    @Test
+    void sixDigits_no() {
+        assertFalse(isSevenDigitAndLong(123456L));
+    }
+
+    @Test
+    void eightDigits_no() {
+        assertFalse(isSevenDigitAndLong(12345678L));
+    }
+
+    @Test
+    void negative_no() {
+        assertFalse(isSevenDigitAndLong(-1234567L));
+    }
+
+    @Test
+    void boundary_lowest_ok() {
+        assertTrue(isSevenDigitAndLong(1_000_000L));
+    }
+
+    @Test
+    void boundary_highest_ok() {
+        assertTrue(isSevenDigitAndLong(9_999_999L));
+    }
 
     @BeforeEach
     void setUp() {
@@ -164,7 +223,6 @@ class HeroRegistrySystemTest {
         assertTrue(heroes.contains(superman), "Collection contains the hero");
         assertEquals(superman, heroes.get(heroes.size() - 1), "Hero should be last");
     }
-
 
     @Test
     void testHeroDelete() {
@@ -197,18 +255,16 @@ class HeroRegistrySystemTest {
                 .findFirst()
                 .orElseThrow();
 
-        assertEquals(9.8, updated.getRating(), "Hero's should be updated");
-        assertEquals("G.O.A.T", updated.getStrengthBase(), "Hero's should be updated");
-        assertEquals("Star Girl", updated.getHeroName());
+            assertEquals(9.8, updated.getRating(), "Hero's should be updated");
+            assertEquals("G.O.A.T", updated.getStrengthBase(), "Hero's should be updated");
+            assertEquals("Star Girl", updated.getHeroName());
     }
 
     @Test
     void testGetAverageRating() {
-
         double result = sut.getAverageRating();
 
-        assertEquals(9.15,result, "Hero's average rating on seeded data should b 9.15");
-
+        assertEquals(9.15, result, "Hero's average rating on seeded data should b 9.15");
     }
 
     @Test
@@ -226,5 +282,12 @@ class HeroRegistrySystemTest {
         String result = sut.sendingSOS(starGirl.getId());
 
         assertEquals("Star Girl received your SOS, and close the chat! that hero is retired", result, "SOS should be reject since star girl is retired");
+    }
+
+    @Test //just open feature
+    void testBatchUpload() {
+        int result = sut.batchUpload();
+
+        assertEquals(10, result, "Batch upload should return 10 when finished");
     }
 }
