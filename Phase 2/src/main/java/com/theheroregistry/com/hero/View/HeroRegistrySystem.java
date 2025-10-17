@@ -282,6 +282,8 @@ public class HeroRegistrySystem {
             }
         }
 
+        scanner.nextLine();//consumes new line leftover
+
         System.out.println("\n✅ Hero data entered successfully!\n");
         return heroData;
     }
@@ -415,6 +417,8 @@ public class HeroRegistrySystem {
                 System.out.println("❌ Strength base cannot be empty.");
             }
         }
+
+        scanner.nextLine();//consumes new line leftover
 
         System.out.println("\n✅ Hero data entered successfully!\n");
         return heroData;
@@ -776,7 +780,7 @@ public class HeroRegistrySystem {
             System.out.println("--> 2. Toggle Retirement");
             System.out.println("--> 3. Average Rating");
             System.out.println("--> 4. Back to main menu");
-            System.out.println(">>>");
+            System.out.print(">>>");
 
             try {
                 selection = subScanner.nextInt();
@@ -785,12 +789,14 @@ public class HeroRegistrySystem {
                     case 1 -> {
                         System.out.println("What is the Hero's seven digit Id?('1234567')");
                         curId = scanner.nextInt();
+                        System.out.print(">>>");
                         System.out.println(sendingSOS(curId));
                         System.out.println();
                     }
                     case 2 -> {
                         System.out.println("What is the Hero's seven digit Id?('1234567')");
                         curId = scanner.nextInt();
+                        System.out.print(">>>");
                         System.out.println(heroRetirementToggle(curId));
                         System.out.println();
                     }
@@ -918,7 +924,7 @@ public class HeroRegistrySystem {
                 }
                 case "6" -> subMenu();
                 case "exit" -> System.out.println("Exiting the program now...");
-                default -> System.out.println("Unknown command. Try: read, display, create, remove, update, custom, or exit");
+                default -> System.out.println("Unknown command. Try: 1 for read, 2 for display, 3 for create, 4 for remove, 5 for update, 6 for custom, or exit");
             }
         }
     }
