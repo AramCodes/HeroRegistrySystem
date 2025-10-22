@@ -5,11 +5,12 @@
 
 .sidebarItem{
     -fx-text-fill: white;
-    -fx-padding: 0 10;
+    -fx-background-color: #0A4969;
+    -fx-padding: 0 0 20 30;
 }
 
 .sidebarItem:hover {
-    /*-fx-background-color: #146886;*/
+    -fx-background-color: #146886;
     -fx-text-fill: #3fff00;
     -fx-border-color: #3fff00;
     -fx-border-width: 0 3 0 6;

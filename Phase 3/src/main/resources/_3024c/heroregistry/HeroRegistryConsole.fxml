@@ -81,7 +81,7 @@
                <children>
                   <VBox layoutX="-3.0" layoutY="55.0" prefHeight="200.0" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="55.0">
                      <children>
-                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: #0A4969;" styleClass="sidebarItem" text="Read" textFill="WHITE">
+                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" styleClass="sidebarItem" text="Read" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
@@ -92,7 +92,7 @@
                                  </image></ImageView>
                            </graphic>
                         </Button>
-                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: #0A4969;" styleClass="sidebarItem" text="Display" textFill="WHITE">
+                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" styleClass="sidebarItem" text="Display" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
@@ -103,7 +103,7 @@
                                  </image></ImageView>
                            </graphic>
                         </Button>
-                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: #0A4969;" styleClass="sidebarItem" text="Create" textFill="WHITE">
+                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" styleClass="sidebarItem" text="Create" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
@@ -115,7 +115,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: #0A4969;" styleClass="sidebarItem" text="Remove" textFill="WHITE">
+                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" styleClass="sidebarItem" text="Remove" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
@@ -126,7 +126,7 @@
                                  </image></ImageView>
                            </graphic>
                         </Button>
-                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: #0A4969;" styleClass="sidebarItem" text="Update" textFill="WHITE">
+                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" styleClass="sidebarItem" text="Update" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
@@ -137,7 +137,7 @@
                                  </image></ImageView>
                            </graphic>
                         </Button>
-                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: #0A4969;" styleClass="sidebarItem" text="Average" textFill="WHITE">
+                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" styleClass="sidebarItem" text="Average" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
