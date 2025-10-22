@@ -1,0 +1,22 @@
+.menuItem:hover{
+    -fx-border-color: #660099;
+    -fx-border-width: 0px 0px 3px 0px;
+}
+
+.sidebarItem{
+    -fx-text-fill: white;
+    -fx-padding: 0 10;
+}
+
+.sidebarItem:hover {
+    /*-fx-background-color: #146886;*/
+    -fx-text-fill: #3fff00;
+    -fx-border-color: #3fff00;
+    -fx-border-width: 0 3 0 6;
+    -fx-border-style: solid;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-padding: 8 12 8 12;
+    -fx-cursor: hand;
+}
+

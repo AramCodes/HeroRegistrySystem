@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: White;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="_3024c.heroregistry.Controller">
+   <children>
+      <BorderPane prefHeight="900.0" prefWidth="1500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <AnchorPane minHeight="0.0" prefHeight="65.0" prefWidth="200.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+               <children>
+                  <Pane layoutX="103.0" layoutY="20.0" prefHeight="65.0" prefWidth="1500.0" style="-fx-background-color: #032d4d;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <ImageView fx:id="Exit" fitHeight="40.0" fitWidth="40.0" layoutX="1446.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Images/exit.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="MenuClose" layoutX="12.0" layoutY="19.0" prefHeight="22.0" prefWidth="85.0" text="MENU" textFill="#b7b7b7">
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Images/menu.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="Menu" layoutX="12.0" layoutY="20.0" prefHeight="22.0" prefWidth="85.0" text="MENU" textFill="#b7b7b7">
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Images/menu1.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Button layoutX="200.0" layoutY="19.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="272.0" style="-fx-background-color: white;" styleClass="menuItem" text="Dashboard">
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Images/dash1.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font size="16.0" />
+                           </font></Button>
+                        <HBox layoutX="854.0" layoutY="27.0" prefHeight="40.0" prefWidth="524.0" />
+                        <Button layoutX="478.0" layoutY="19.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="272.0" style="-fx-background-color: white;" styleClass="menuItem" text="Database">
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Images/data1.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Button>
+                     </children></Pane>
+               </children>
+            </AnchorPane>
+         </top>
+         <left>
+            <AnchorPane fx:id="slider" prefHeight="835.0" prefWidth="200.0" style="-fx-background-color: #0A4969;" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox layoutX="-3.0" layoutY="55.0" prefHeight="200.0" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="55.0">
+                     <children>
+                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: #0A4969;" styleClass="sidebarItem" text="Read" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="icons">
+                                 <image>
+                                    <Image url="@Images/read.png" />
+                                 </image></ImageView>
+                           </graphic>
+                        </Button>
+                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: #0A4969;" styleClass="sidebarItem" text="Display" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="icons">
+                                 <image>
+                                    <Image url="@Images/display.png" />
+                                 </image></ImageView>
+                           </graphic>
+                        </Button>
+                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: #0A4969;" styleClass="sidebarItem" text="Create" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="icons">
+                                 <image>
+                                    <Image url="@Images/add.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: #0A4969;" styleClass="sidebarItem" text="Remove" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="icons">
+                                 <image>
+                                    <Image url="@Images/delete.png" />
+                                 </image></ImageView>
+                           </graphic>
+                        </Button>
+                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: #0A4969;" styleClass="sidebarItem" text="Update" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="icons">
+                                 <image>
+                                    <Image url="@Images/update.png" />
+                                 </image></ImageView>
+                           </graphic>
+                        </Button>
+                        <Button alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: #0A4969;" styleClass="sidebarItem" text="Average" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="icons">
+                                 <image>
+                                    <Image url="@Images/report.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </left>
+      </BorderPane>
+   </children>
+</AnchorPane>
