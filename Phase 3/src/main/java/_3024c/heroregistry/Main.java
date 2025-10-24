@@ -19,7 +19,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/_3024c/heroregistry/HeroRegistryConsole.fxml")));
+		Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/_3024c/heroregistry/Dashboard.fxml")));
 		primaryStage.initStyle(StageStyle.UNDECORATED);
 
 		root.setOnMousePressed(event -> {

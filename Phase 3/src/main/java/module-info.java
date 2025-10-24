@@ -6,4 +6,6 @@ module _3024c.heroregistry {
 
     opens _3024c.heroregistry to javafx.fxml;
     exports _3024c.heroregistry;
+    exports _3024c.heroregistry.controllers;
+    opens _3024c.heroregistry.controllers to javafx.fxml;
 }

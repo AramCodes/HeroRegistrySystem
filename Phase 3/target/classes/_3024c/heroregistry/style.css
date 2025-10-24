@@ -1,6 +1,11 @@
+.menuClose:hover{
+    -fx-cursor: hand;
+}
+
 .menuItem:hover{
     -fx-border-color: #660099;
     -fx-border-width: 0px 0px 3px 0px;
+    -fx-cursor: hand;
 }
 
 .sidebarItem{
@@ -19,5 +24,36 @@
     -fx-border-insets: 0;
     -fx-padding: 8 12 8 12;
     -fx-cursor: hand;
+}
+
+.grid{
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 20;
+}
+
+.table-columns{
+    -fx-color: white;
+    -fx-font-weight: bold;
+}
+
+.table-titles text{
+    -fx-font-weight: bold;
+    -fx-padding: 10;
+}
+.searchbox{
+    -fx-padding: 20 0 20 0;
+}
+.btn{
+    -fx-cursor: hand;
+}
+
+.exit{
+    -fx-opacity: .75;
+}
+
+.exit:hover{
+    -fx-cursor: hand;
+    -fx-opacity: 1;
 }
 
