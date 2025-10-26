@@ -18,6 +18,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: White;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="_3024c.heroregistry.controllers.Controller">
    <children>
@@ -153,35 +154,6 @@
          <center>
             <StackPane prefHeight="800.0" BorderPane.alignment="CENTER">
                <children>
-                  <Pane fx:id="pnRead" prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #FFF;" />
-                  <GridPane fx:id="pnDisplay" prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #fff;" styleClass="grid">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints maxHeight="274.0" minHeight="0.0" prefHeight="70.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="787.0" minHeight="10.0" prefHeight="725.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <TableView prefHeight="200.0" prefWidth="200.0" styleClass="table-columns" GridPane.rowIndex="1">
-                          <columns>
-                            <TableColumn editable="false" minWidth="25.0" prefWidth="144.0" sortable="false" styleClass="table-titles" text="Id" />
-                            <TableColumn editable="false" minWidth="25.0" prefWidth="144.0" sortable="false" styleClass="table-titles" text="Hero Name" />
-                              <TableColumn editable="false" minWidth="25.0" prefWidth="144.0" sortable="false" styleClass="table-titles" text="Real Name" />
-                              <TableColumn editable="false" minWidth="25.0" prefWidth="144.0" sortable="false" styleClass="table-titles" text="Hero Headshot" />
-                              <TableColumn editable="false" minWidth="25.0" prefWidth="144.0" sortable="false" styleClass="table-titles" text="Age" />
-                              <TableColumn editable="false" minWidth="25.0" prefWidth="144.0" sortable="false" styleClass="table-titles" text="Rating" />
-                              <TableColumn editable="false" minWidth="25.0" prefWidth="144.0" sortable="false" styleClass="table-titles" text="isActive" />
-                              <TableColumn minWidth="25.0" prefWidth="148.0" sortable="false" styleClass="table-titles" text="Description" />
-                              <TableColumn editable="false" minWidth="25.0" prefWidth="144.0" sortable="false" styleClass="table-titles" text="StrengthBase" />
-                          </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                        </TableView>
-                     </children>
-                  </GridPane>
-                  <Pane fx:id="pnAverage" layoutX="10.0" layoutY="10.0" prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #FFF;" />
                   <VBox fx:id="pnCreate" prefHeight="600.0">
                      <children>
                         <Pane prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #FFF;">
@@ -263,6 +235,33 @@
                         </Pane>
                      </children>
                   </VBox>
+                  <GridPane fx:id="pnDisplay" prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #fff;" styleClass="grid">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="274.0" minHeight="0.0" prefHeight="70.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="787.0" minHeight="10.0" prefHeight="725.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <TableView prefHeight="200.0" prefWidth="200.0" styleClass="table-columns" GridPane.rowIndex="1">
+                          <columns>
+                            <TableColumn editable="false" minWidth="25.0" prefWidth="144.0" sortable="false" styleClass="table-titles" text="Id" />
+                            <TableColumn editable="false" minWidth="25.0" prefWidth="144.0" sortable="false" styleClass="table-titles" text="Hero Name" />
+                              <TableColumn editable="false" minWidth="25.0" prefWidth="144.0" sortable="false" styleClass="table-titles" text="Real Name" />
+                              <TableColumn editable="false" minWidth="25.0" prefWidth="144.0" sortable="false" styleClass="table-titles" text="Hero Headshot" />
+                              <TableColumn editable="false" minWidth="25.0" prefWidth="144.0" sortable="false" styleClass="table-titles" text="Age" />
+                              <TableColumn editable="false" minWidth="25.0" prefWidth="144.0" sortable="false" styleClass="table-titles" text="Rating" />
+                              <TableColumn editable="false" minWidth="25.0" prefWidth="144.0" sortable="false" styleClass="table-titles" text="isActive" />
+                              <TableColumn minWidth="25.0" prefWidth="148.0" sortable="false" styleClass="table-titles" text="Description" />
+                              <TableColumn editable="false" minWidth="25.0" prefWidth="144.0" sortable="false" styleClass="table-titles" text="StrengthBase" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </GridPane>
                   <VBox fx:id="pnUpdate" layoutX="10.0" layoutY="10.0" prefHeight="600.0">
                      <children>
                         <Pane prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #FFF;">
@@ -344,14 +343,37 @@
                         </Pane>
                      </children>
                   </VBox>
+                  <Pane fx:id="pnAverage" layoutX="10.0" layoutY="10.0" style="-fx-background-color: #FFF;">
+                     <children>
+                        <Button layoutX="565.0" layoutY="566.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="170.0" styleClass="actionBtn" text="Get Average Rating" />
+                        <Pane layoutX="111.0" layoutY="365.0" prefHeight="112.0" prefWidth="1100.0" style="-fx-border-color: #0A4969;" />
+                     </children>
+                  </Pane>
                   <Pane fx:id="pnRemove" layoutX="10.0" layoutY="10.0" prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #FFF;">
                      <children>
-                        <Label layoutX="55.0" layoutY="300.0" text="Strength Base">
+                        <Label layoutX="296.0" layoutY="288.0" text="What is the Id of the Hero you want to  delete?">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="System Bold Italic" size="16.0" />
                            </font>
                         </Label>
-                     </children></Pane>
+                        <TextField layoutX="661.0" layoutY="286.0" prefHeight="30.0" prefWidth="149.0" />
+                        <Button layoutX="497.0" layoutY="343.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="147.0" styleClass="actionBtn" text="Delete " />
+                     </children>
+                  </Pane>
+                  <Pane fx:id="pnRead" prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #FFF;">
+                     <children>
+                        <AnchorPane layoutX="533.0" layoutY="418.0" prefHeight="200.0" prefWidth="178.0" styleClass="upload">
+                           <children>
+                              <Button fx:id="importBtn" layoutX="-1.0" layoutY="144.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="179.0" styleClass="actionBtn" text="Import" />
+                           </children>
+                        </AnchorPane>
+                        <Text layoutX="437.0" layoutY="347.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What file would you like to upload in to The Hero Registry System?" wrappingWidth="441.13671875">
+                           <font>
+                              <Font size="26.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </Pane>
                </children>
             </StackPane>
          </center>

@@ -48,7 +48,15 @@
 .actionBtn{
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    -fx-font-size: 16px;
     -fx-background-color: #0A4969;
+    -fx-cursor: hand;
+}
+
+.upload {
+    -fx-background-color:#fff;
+    -fx-background-radius:8px;
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.5), 6,0,0,0);
 }
 
 .btn{
