@@ -49,6 +49,16 @@
     -fx-padding: 20 0 20 0;
 }
 
+.statusLabel{
+    -fx-text-fill: #FF0000
+}
+
+.connect{
+    -fx-cursor: hand;
+    -fx-border-radius: 100%;
+
+}
+
 .actionBtn{
     -fx-text-fill: white;
     -fx-font-weight: bold;

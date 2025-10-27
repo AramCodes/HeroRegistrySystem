@@ -139,8 +139,8 @@ public class Controller implements Initializable {
         }
     }
 
-    public void goToDb(ActionEvent event) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/_3024c/heroregistry/Database.fxml"));
+    public static void goToDb(ActionEvent event) throws Exception {
+        FXMLLoader loader = new FXMLLoader(Controller.class.getResource("/_3024c/heroregistry/Database.fxml"));
         Parent root = loader.load();
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

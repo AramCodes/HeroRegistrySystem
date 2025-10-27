@@ -14,11 +14,15 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static _3024c.heroregistry.controllers.Controller.goToDb;
 
 public class DatabaseController implements Initializable {
 
@@ -38,6 +42,9 @@ public class DatabaseController implements Initializable {
     private AnchorPane slider;
 
     @FXML
+    private Text statusLabel;
+
+    @FXML
     void handleClicks(ActionEvent event) throws Exception {
         Object src = event.getSource();
         if (!(src instanceof Button)) return;
@@ -52,7 +59,7 @@ public class DatabaseController implements Initializable {
         if(key.equals("btnDash")){
             goToDash(event);
         } else if (key.equals("btnData")) {
-            System.out.println("already here");
+            goToDb(event);
         }
     }
 
@@ -75,8 +82,8 @@ public class DatabaseController implements Initializable {
         menuClose.setOnMouseClicked(toggleMenu);
     }
 
-    public void goToDash(ActionEvent event) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/_3024c/heroregistry/Dashboard.fxml"));
+    public static void goToDash(ActionEvent event) throws Exception {
+        FXMLLoader loader = new FXMLLoader(DatabaseController.class.getResource("/_3024c/heroregistry/Dashboard.fxml"));
         Parent root = loader.load();
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
