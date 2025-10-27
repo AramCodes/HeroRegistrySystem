@@ -4,7 +4,11 @@ import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -12,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -90,7 +95,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void handleClicks(ActionEvent event){
+    private void handleClicks(ActionEvent event) throws Exception {
         Object src = event.getSource();
         if (!(src instanceof Button)) return;
 
@@ -126,11 +131,20 @@ public class Controller implements Initializable {
                 pnAverage.toFront();
                 break;
             case "btnData":
-                //TODO
+                goToDb(event);
                 break;
             default:
                 // TODO: unknown button
                 break;
         }
+    }
+
+    public void goToDb(ActionEvent event) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/_3024c/heroregistry/Database.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }

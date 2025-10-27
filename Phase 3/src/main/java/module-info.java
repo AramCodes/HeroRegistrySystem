@@ -3,6 +3,8 @@ module _3024c.heroregistry {
     requires javafx.fxml;
 
     requires org.controlsfx.controls;
+    requires javafx.base;
+    requires javafx.graphics;
 
     opens _3024c.heroregistry to javafx.fxml;
     exports _3024c.heroregistry;

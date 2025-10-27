@@ -154,87 +154,6 @@
          <center>
             <StackPane prefHeight="800.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox fx:id="pnCreate" prefHeight="600.0">
-                     <children>
-                        <Pane prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #FFF;">
-                           <children>
-                              <TableView layoutX="523.0" layoutY="52.0" prefHeight="270.0" prefWidth="758.0">
-                                <columns>
-                                  <TableColumn prefWidth="52.0" text="Id" />
-                                  <TableColumn prefWidth="102.0" text="Hero Name" />
-                                    <TableColumn prefWidth="100.0" text="Real Name" />
-                                    <TableColumn prefWidth="50.0" text="Age" />
-                                    <TableColumn prefWidth="45.0" text="Rating" />
-                                    <TableColumn minWidth="0.0" prefWidth="49.0" text="Active" />
-                                    <TableColumn prefWidth="264.0" text="Description" />
-                                    <TableColumn editable="false" prefWidth="95.0" text="Strength Base" />
-                                </columns>
-                              </TableView>
-                              <VBox layoutX="168.0" layoutY="52.0" prefHeight="270.0" prefWidth="333.0" spacing="10.0">
-                                 <children>
-                                    <TextField />
-                                    <TextField layoutX="10.0" layoutY="10.0" />
-                                    <TextField layoutX="10.0" layoutY="35.0" />
-                                    <TextField layoutX="10.0" layoutY="60.0" />
-                                    <TextField layoutX="10.0" layoutY="85.0" />
-                                    <TextField layoutX="10.0" layoutY="110.0" />
-                                    <TextField layoutX="10.0" layoutY="135.0" />
-                                    <TextField layoutX="10.0" layoutY="160.0" prefHeight="368.0" prefWidth="381.0" />
-                                 </children>
-                              </VBox>
-                              <Button layoutX="233.0" layoutY="586.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="186.0" styleClass="actionBtn" text="Create">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </Button>
-                              <VBox layoutX="42.0" layoutY="52.0" prefHeight="612.0" prefWidth="231.0" spacing="15.0">
-                                 <children>
-                                    <Label text="ID">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Hero's Name">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Real Name">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Age">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <Label prefHeight="17.0" prefWidth="55.0" text="Rating">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Is Active">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Description">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Strength Base">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </Pane>
-                     </children>
-                  </VBox>
                   <GridPane fx:id="pnDisplay" prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #fff;" styleClass="grid">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -343,12 +262,6 @@
                         </Pane>
                      </children>
                   </VBox>
-                  <Pane fx:id="pnAverage" layoutX="10.0" layoutY="10.0" style="-fx-background-color: #FFF;">
-                     <children>
-                        <Button layoutX="565.0" layoutY="566.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="170.0" styleClass="actionBtn" text="Get Average Rating" />
-                        <Pane layoutX="111.0" layoutY="365.0" prefHeight="112.0" prefWidth="1100.0" style="-fx-border-color: #0A4969;" />
-                     </children>
-                  </Pane>
                   <Pane fx:id="pnRemove" layoutX="10.0" layoutY="10.0" prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #FFF;">
                      <children>
                         <Label layoutX="296.0" layoutY="288.0" text="What is the Id of the Hero you want to  delete?">
@@ -362,16 +275,103 @@
                   </Pane>
                   <Pane fx:id="pnRead" prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #FFF;">
                      <children>
-                        <AnchorPane layoutX="533.0" layoutY="418.0" prefHeight="200.0" prefWidth="178.0" styleClass="upload">
+                        <AnchorPane layoutX="533.0" layoutY="226.0" prefHeight="200.0" prefWidth="178.0" styleClass="upload">
                            <children>
                               <Button fx:id="importBtn" layoutX="-1.0" layoutY="144.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="179.0" styleClass="actionBtn" text="Import" />
                            </children>
                         </AnchorPane>
-                        <Text layoutX="437.0" layoutY="347.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What file would you like to upload in to The Hero Registry System?" wrappingWidth="441.13671875">
+                        <Text layoutX="401.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What file would you like to upload in to The Hero Registry System?" wrappingWidth="441.13671875">
                            <font>
                               <Font size="26.0" />
                            </font>
                         </Text>
+                     </children>
+                  </Pane>
+                  <VBox fx:id="pnCreate" prefHeight="600.0">
+                     <children>
+                        <Pane prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #FFF;">
+                           <children>
+                              <TableView layoutX="523.0" layoutY="52.0" prefHeight="270.0" prefWidth="758.0">
+                                <columns>
+                                  <TableColumn prefWidth="52.0" text="Id" />
+                                  <TableColumn prefWidth="102.0" text="Hero Name" />
+                                    <TableColumn prefWidth="100.0" text="Real Name" />
+                                    <TableColumn prefWidth="50.0" text="Age" />
+                                    <TableColumn prefWidth="45.0" text="Rating" />
+                                    <TableColumn minWidth="0.0" prefWidth="49.0" text="Active" />
+                                    <TableColumn prefWidth="264.0" text="Description" />
+                                    <TableColumn editable="false" prefWidth="95.0" text="Strength Base" />
+                                </columns>
+                              </TableView>
+                              <VBox layoutX="168.0" layoutY="52.0" prefHeight="270.0" prefWidth="333.0" spacing="10.0">
+                                 <children>
+                                    <TextField />
+                                    <TextField layoutX="10.0" layoutY="10.0" />
+                                    <TextField layoutX="10.0" layoutY="35.0" />
+                                    <TextField layoutX="10.0" layoutY="60.0" />
+                                    <TextField layoutX="10.0" layoutY="85.0" />
+                                    <TextField layoutX="10.0" layoutY="110.0" />
+                                    <TextField layoutX="10.0" layoutY="135.0" />
+                                    <TextField layoutX="10.0" layoutY="160.0" prefHeight="368.0" prefWidth="381.0" />
+                                 </children>
+                              </VBox>
+                              <Button layoutX="233.0" layoutY="586.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="186.0" styleClass="actionBtn" text="Create">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <VBox layoutX="42.0" layoutY="52.0" prefHeight="612.0" prefWidth="231.0" spacing="15.0">
+                                 <children>
+                                    <Label text="ID">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Hero's Name">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Real Name">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Age">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label prefHeight="17.0" prefWidth="55.0" text="Rating">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Is Active">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Description">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Strength Base">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </Pane>
+                     </children>
+                  </VBox>
+                  <Pane fx:id="pnAverage" layoutX="10.0" layoutY="10.0" style="-fx-background-color: #FFF;">
+                     <children>
+                        <Button layoutX="554.0" layoutY="353.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="170.0" styleClass="actionBtn" text="Get Average Rating" />
+                        <Pane layoutX="89.0" layoutY="171.0" prefHeight="112.0" prefWidth="1100.0" style="-fx-border-color: #0A4969;" />
                      </children>
                   </Pane>
                </children>

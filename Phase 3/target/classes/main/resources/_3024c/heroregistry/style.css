@@ -2,6 +2,10 @@
     -fx-cursor: hand;
 }
 
+.menuItem{
+    -fx-background-color: white;
+}
+
 .menuItem:hover{
     -fx-border-color: #3fff00;
     -fx-border-width: 0px 0px 10px 0px;
