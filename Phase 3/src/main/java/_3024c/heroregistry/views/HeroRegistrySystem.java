@@ -407,82 +407,82 @@ public class HeroRegistrySystem {
         }
     }
 
-    /*
-        batchUpload()
-        this method read and writes new records from input file to original db.
-        there are no parameters needed for this method
-        the return type is int, the amount of items added
-    */
-
-    @SuppressWarnings("DuplicateExpressions")
-    public int batchUpload(){
-
-
-        while (true) {
-            System.out.println("Path to the text file to import:");
-            String input = scanner.nextLine().trim();
-
-            if (input.isEmpty()) {
-                System.out.println("Please enter a file path (e.g., import.txt or C:\\Users\\You\\import.txt).");
-                continue;
-            }
-
-            if ((input.startsWith("\"") && input.endsWith("\"")) ||
-                    (input.startsWith("'") && input.endsWith("'"))) {
-                input = input.substring(1, input.length() - 1);
-            }
-
-            Path importPath = Paths.get(input);
-            if (!importPath.isAbsolute()) {
-                importPath = Paths.get("").toAbsolutePath().resolve(importPath);
-            }
-
-            if (!Files.isRegularFile(importPath) || !Files.isReadable(importPath)) {
-                System.err.println("Cannot read: " + importPath);
-                System.err.println("Tip: current working directory is: " + Paths.get("").toAbsolutePath());
-                System.err.println("Try again.\n");
-                continue;
-            }
-
-            Set<Hero> merged = new LinkedHashSet<>(heroes);
-
-            int importedCount = 0;
-            int skippedMalformed = 0;
-
-            try (Stream<String> lines = Files.lines(importPath, StandardCharsets.UTF_8)) {
-                for (String line : (Iterable<String>) lines::iterator) {
-                    String trimmed = line == null ? "" : line.trim();
-                    if (trimmed.isEmpty() || trimmed.startsWith("#")) {
-                        continue;
-                    }
-
-                    Optional<Hero> parsed = parseHeroFromLine(trimmed);
-
-                    if (parsed.isPresent()) {
-                        if (merged.add(parsed.get())) {
-                            importedCount++;
-                        }
-                    } else {
-                        skippedMalformed++;
-                    }
-                }
-
-            } catch (IOException e) {
-                System.err.println("Error reading import file: " + e.getMessage());
-                return 1;
-            }
-
-            heroes.clear();
-            heroes.addAll(merged);
-            //overwriteOriginalFile();
-
-            System.out.println("Imported " + (importedCount) + " total records into the Hero Registry System" );
-            System.out.println("And failed to import " + skippedMalformed + " records into the Hero Registry System");
-            break;
-        }
-
-        return 0;
-    }
+//    /*
+//        batchUpload()
+//        this method read and writes new records from input file to original db.
+//        there are no parameters needed for this method
+//        the return type is int, the amount of items added
+//    */
+//
+//
+//    public int batchUpload(){
+//
+//
+//        while (true) {
+//            System.out.println("Path to the text file to import:");
+//            String input = scanner.nextLine().trim();
+//
+//            if (input.isEmpty()) {
+//                System.out.println("Please enter a file path (e.g., import.txt or C:\\Users\\You\\import.txt).");
+//                continue;
+//            }
+//
+//            if ((input.startsWith("\"") && input.endsWith("\"")) ||
+//                    (input.startsWith("'") && input.endsWith("'"))) {
+//                input = input.substring(1, input.length() - 1);
+//            }
+//
+//            Path importPath = Paths.get(input);
+//            if (!importPath.isAbsolute()) {
+//                importPath = Paths.get("").toAbsolutePath().resolve(importPath);
+//            }
+//
+//            if (!Files.isRegularFile(importPath) || !Files.isReadable(importPath)) {
+//                System.err.println("Cannot read: " + importPath);
+//                System.err.println("Tip: current working directory is: " + Paths.get("").toAbsolutePath());
+//                System.err.println("Try again.\n");
+//                continue;
+//            }
+//
+//            Set<Hero> merged = new LinkedHashSet<>(heroes);
+//
+//            int importedCount = 0;
+//            int skippedMalformed = 0;
+//
+//            try (Stream<String> lines = Files.lines(importPath, StandardCharsets.UTF_8)) {
+//                for (String line : (Iterable<String>) lines::iterator) {
+//                    String trimmed = line == null ? "" : line.trim();
+//                    if (trimmed.isEmpty() || trimmed.startsWith("#")) {
+//                        continue;
+//                    }
+//
+//                    Optional<Hero> parsed = parseHeroFromLine(trimmed);
+//
+//                    if (parsed.isPresent()) {
+//                        if (merged.add(parsed.get())) {
+//                            importedCount++;
+//                        }
+//                    } else {
+//                        skippedMalformed++;
+//                    }
+//                }
+//
+//            } catch (IOException e) {
+//                System.err.println("Error reading import file: " + e.getMessage());
+//                return 1;
+//            }
+//
+//            heroes.clear();
+//            heroes.addAll(merged);
+//            overwriteOriginalFile();
+//
+//            System.out.println("Imported " + (importedCount) + " total records into the Hero Registry System" );
+//            System.out.println("And failed to import " + skippedMalformed + " records into the Hero Registry System");
+//            break;
+//        }
+//
+//        return 0;
+//    }
 
 
     public String addHero(Hero hero) {
@@ -494,48 +494,7 @@ public class HeroRegistrySystem {
 
 
 
-
     /*
-        heroDelete
-        this method searches Heroes for matching id  and removes if found then uses fileWrite to reflect
-        deletion in text file.
-        there is a parameter of id this method
-        the return type is void
-    */
-
-    public boolean heroDelete(long id) {
-        boolean found = false;
-
-//        if (isSevenDigitAndLong(id)) {
-//            for (int i = 0; i < heroes.size(); i++) {
-//                if (heroes.get(i).getId() == id) {
-//                    heroes.remove(i);
-//                    found = true;
-//                    break;
-//                }
-//            }
-
-            if (found) {
-                //overwriteOriginalFile();
-                System.out.println(id + " was successfully deleted from the Hero Registry System.");
-                System.out.println("The Hero List is now: ");
-                //displayAllHeroes();
-            } else {
-                System.out.println("Hero with ID " + id + " not found.");
-            }
-
-//        }else {
-//            System.out.println("Invalid ID. It must be 7 digits.");
-//            System.out.println("What is Hero's seven digit Id?('1234567')");
-//            curId = scanner.nextInt();
-//            heroDelete(curId);
-//        }
-//
-//
-        return found;
-    }
-
-        /*
         heroUpdate
         this method searches Heroes for matching id  and updates it if found then uses fileWrite to reflect
         change in text file.

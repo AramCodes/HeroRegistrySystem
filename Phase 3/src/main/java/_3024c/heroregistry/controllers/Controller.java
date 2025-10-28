@@ -21,14 +21,18 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class Controller implements Initializable {
 
@@ -138,6 +142,9 @@ public class Controller implements Initializable {
 
     @FXML
     private TextField announcement;
+
+    @FXML
+    private TextField announcement2;
 
     @FXML
     private AnchorPane slider;
@@ -257,8 +264,33 @@ public class Controller implements Initializable {
         Button btn = (Button) src;
 
         switch (btn.getId()) {
-            case "btnQ":
-                //TODO
+            case "actionImport":
+                FileChooser chooser = new FileChooser();
+                chooser.setTitle("Select file to import");
+                chooser.getExtensionFilters().addAll(
+                        new FileChooser.ExtensionFilter("Text/CSV Files", "*.txt", "*.csv"),
+                        new FileChooser.ExtensionFilter("All Files", "*.*")
+                );
+
+                File selected = chooser.showOpenDialog(actionImport.getScene().getWindow());
+                if (selected == null) {
+                    showAnnouncementImport("No file selected.", false);
+                    return;
+                }
+
+                Path importPath = selected.toPath();
+                ImportResult result = batchUpload(importPath);
+
+                if (!result.ok()) {
+                    String msg = "Error reading import file: " + result.error().getMessage();
+                    showAnnouncementImport(msg, false);
+                    return;
+                }
+
+                showAnnouncementImport(
+                        "Imported " + result.imported() + " records. Skipped " + result.skippedMalformed() + " malformed line(s).",
+                        true
+                );
                 break;
 
             case "actionDisplay":
@@ -409,10 +441,6 @@ public class Controller implements Initializable {
 
         }
 
-        System.out.println();
-        System.out.println("List Loaded!!!");
-        System.out.println();
-
         if (!heroes.isEmpty()){
             return heroes.size();
         }
@@ -545,5 +573,125 @@ public class Controller implements Initializable {
         PauseTransition hide = new PauseTransition(Duration.seconds(5));
         hide.setOnFinished(e -> announcement.setVisible(false));
         hide.playFromStart();
+    }
+
+        /*
+        batchUpload()
+        this method read and writes new records from input file to original db.
+        there are no parameters needed for this method
+        the return type is int, the amount of items added
+    */
+
+
+    public ImportResult batchUpload(Path importPath){
+        Set<Hero> merged = new LinkedHashSet<>(heroes);
+        int importedCount = 0;
+        int skippedMalformed = 0;
+
+        try {
+            if (!importPath.isAbsolute()) {
+                importPath = Paths.get("").toAbsolutePath().resolve(importPath);
+            }
+
+            if (!Files.isRegularFile(importPath) || !Files.isReadable(importPath)) {
+                return new ImportResult(importedCount, skippedMalformed,
+                        new IOException("Cannot read: " + importPath + " (cwd: " + Paths.get("").toAbsolutePath() + ")"));
+            }
+
+            try (Stream<String> lines = Files.lines(importPath, StandardCharsets.UTF_8)) {
+                for (String line : (Iterable<String>) lines::iterator) {
+                    String trimmed = (line == null) ? "" : line.trim();
+                    if (trimmed.isEmpty() || trimmed.startsWith("#")) continue;
+
+                    Optional<Hero> parsed = parseHeroFromLine(trimmed);
+                    if (parsed.isPresent()) {
+                        if (merged.add(parsed.get())) {
+                            importedCount++;
+                        }
+                    } else {
+                        skippedMalformed++;
+                    }
+                }
+            }
+
+            heroes.clear();
+            heroes.addAll(merged);
+            overwriteOriginalFile();
+
+            return new ImportResult(importedCount, skippedMalformed, null);
+
+        } catch (Exception e) {
+            return new ImportResult(0, 0, e);
+        }
+    }
+
+    /*
+        parseHeroFromLine
+        this method simply reads Hero data  and converts it into a hero object
+        the parameter is a single line
+        the return type is an Optional<Hero>, will return converted data
+    */
+
+    public Optional<Hero> parseHeroFromLine(String line){
+        if (line == null || line.isEmpty()) {
+            throw new IllegalArgumentException("Line cannot be null or empty");
+        }
+
+        String[] parts = line.split("-", 9);
+
+        if (parts.length != 9) {
+            throw new IllegalArgumentException("Invalid hero data format: " + line);
+        }
+
+        try {
+
+            Hero ParsedHero = Hero.builder()
+                    .id(Long.parseLong(parts[0]))
+                    .heroName(parts[1])
+                    .realName(parts[2])
+                    .heroHeadshot(parts[3])
+                    .age(Integer.parseInt(parts[4]))
+                    .rating(Double.parseDouble(parts[5]))
+                    .isActive(Boolean.parseBoolean(parts[6]))
+                    .description(parts[7])
+                    .strengthBase(parts[8])
+                    .build();
+
+            return Optional.of(ParsedHero);
+
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Error parsing fields in hero data: " + line, e);
+        }
+    }
+
+    /*
+        showAnnouncementImport
+        this helper method simply hides and shows messages(errors or completions) on the announcement text field and auto-hides message after 5 sec.
+        the parameters are a message to be displayed and the success status which determines the color the text is outputted
+        the return type is void
+    */
+    private void showAnnouncementImport(String msg, boolean success) {
+        announcement2.setText(msg);
+        announcement2.setStyle(
+                success
+                        ? "-fx-text-fill: #1b7e22; -fx-font-weight: 600;"
+                        : "-fx-text-fill: #b00020; -fx-font-weight: 600;"
+        );
+        announcement2.setVisible(true);
+
+        // auto-hides announcements after 5s
+        PauseTransition hide = new PauseTransition(Duration.seconds(5));
+        hide.setOnFinished(e -> announcement2.setVisible(false));
+        hide.playFromStart();
+    }
+
+    /*
+        ImportResult
+        this helper method simply tallies the result fed to it
+        the parameters are number of successfully imported lines, failed lines, and the exception object thrown
+        the return type is containing ok if truth and eror object if contains false.
+    */
+    public record ImportResult(int imported, int skippedMalformed, Exception error) {
+        boolean ok() { return error == null; }
     }
 }
