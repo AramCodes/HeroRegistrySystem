@@ -3,7 +3,9 @@ package _3024c.heroregistry.controllers;
 import _3024c.heroregistry.models.Hero;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,6 +19,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -37,6 +41,7 @@ import java.util.stream.Stream;
 public class Controller implements Initializable {
 
     private final List<Hero> heroes = new ArrayList<>();
+    private final ObservableList<Hero> heroesObs = FXCollections.observableArrayList();
     private long curId;
 
     @FXML
@@ -147,13 +152,69 @@ public class Controller implements Initializable {
     private TextField announcement2;
 
     @FXML
+    private TextField announcement3;
+
+    @FXML
     private AnchorPane slider;
+
+    @FXML
+    private TableColumn<?, ?> colActive;
+
+    @FXML
+    private TableColumn<?, ?> colAge;
+
+    @FXML
+    private TableColumn<?, ?> colDescription;
+
+    @FXML
+    private TableColumn<?, ?> colHeroName;
+
+    @FXML
+    private TableColumn<?, ?> colId;
+
+    @FXML
+    private TableColumn<?, ?> colRating;
+
+    @FXML
+    private TableColumn<?, ?> colRealName;
+
+    @FXML
+    private TableColumn<?, ?> colStrengthBase;
+
+    @FXML
+    private TableView<Hero> createTable;
+
+    @FXML
+    private TextField ratingField;
+
+    @FXML
+    private TextField activeField;
+
+    @FXML
+    private TextField ageField;
+
+    @FXML
+    private TextField heroNameField;
+
+    @FXML
+    private TextField idField;
+
+    @FXML
+    private TextField descriptionField;
+
+    @FXML
+    private TextField realNameField;
+
+    @FXML
+    private TextField strengthBaseField;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         pnDisplay.toFront(); //make sure this is the first page to see
         copyHeroesFromOriginal(); //original population of list
 
+        //first table display
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         heroNameCol.setCellValueFactory(new PropertyValueFactory<>("heroName"));
         realNameCol.setCellValueFactory(new PropertyValueFactory<>("realName"));
@@ -194,6 +255,19 @@ public class Controller implements Initializable {
             }
         });
 
+        //second table create
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colHeroName.setCellValueFactory(new PropertyValueFactory<>("heroName"));
+        colRealName.setCellValueFactory(new PropertyValueFactory<>("realName"));
+        colAge.setCellValueFactory(new PropertyValueFactory<>("age"));
+        colRating.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        colActive.setCellValueFactory(new PropertyValueFactory<>("active"));
+        colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        colStrengthBase.setCellValueFactory(new PropertyValueFactory<>("strengthBase"));
+
+        heroesObs.setAll(heroes);
+        createTable.setItems(heroesObs);
+
         slider.setTranslateX(0);
         menuClose.setVisible(true);
 
@@ -206,10 +280,85 @@ public class Controller implements Initializable {
             slide.play();
         };
 
+        actionCreate.setDefaultButton(true);
+
         menuClose.setOnMouseClicked(toggleMenu);
     }
 
+    private Long parseId(String txt, List<String> errors) {
+        if (txt == null || !txt.matches("\\d{7}")) {
+            errors.add("Hero ID must be exactly 7 digits (e.g., 1234567).");
+            return null;
+        }
+        try {
+            return Long.parseLong(txt);
+        } catch (NumberFormatException ex) {
+            errors.add("Hero ID is not a valid number.");
+            return null;
+        }
+    }
 
+    private String nonEmpty(String txt, String label, List<String> errors) {
+        if (txt == null || txt.trim().isEmpty()) {
+            errors.add(label + " cannot be empty.");
+            return null;
+        }
+        return txt.trim();
+    }
+
+    private String validUrl(String txt, String label, List<String> errors) {
+        String v = nonEmpty(txt, label, errors);
+        if (v == null) return null;
+        // Light URL check
+        if (!v.matches("^(https?|ftp)://[^\\s]+$")) {
+            errors.add(label + " must start with http:// or https://");
+            return null;
+        }
+        return v;
+    }
+
+    private Integer parseAge(String txt, List<String> errors) {
+        String v = nonEmpty(txt, "Age", errors);
+        if (v == null) return null;
+        try {
+            int age = Integer.parseInt(v);
+            if (age <= 0 || age >= 200) {
+                errors.add("Age must be between 1 and 199.");
+                return null;
+            }
+            return age;
+        } catch (NumberFormatException e) {
+            errors.add("Age must be a whole number.");
+            return null;
+        }
+    }
+
+    private Double parseRating(String txt, List<String> errors) {
+        String v = nonEmpty(txt, "Rating", errors);
+        if (v == null) return null;
+        try {
+            double r = Double.parseDouble(v);
+            if (r < 0.0 || r > 10.0) {
+                errors.add("Rating must be between 0.0 and 10.0.");
+                return null;
+            }
+            return r;
+        } catch (NumberFormatException e) {
+            errors.add("Rating must be a decimal number (e.g., 7.8).");
+            return null;
+        }
+    }
+
+    private void clearInputs() {
+        idField.clear();
+        heroNameField.clear();
+        realNameField.clear();
+        ageField.clear();
+        ratingField.clear();
+        descriptionField.clear();
+        strengthBaseField.clear();
+        activeField.clear();
+    }
 
     @FXML
     private void handleClicks(ActionEvent event) throws Exception {
@@ -297,8 +446,8 @@ public class Controller implements Initializable {
                 displayAllHeroes();
                 break;
 
-            case "btnA":
-                //TODO
+            case "actionCreate":
+                createHero(event);
                 break;
 
             case "actionDelete":
@@ -336,6 +485,51 @@ public class Controller implements Initializable {
                 // TODO: unknown button
                 break;
         }
+    }
+
+    public void createHero(ActionEvent event) {
+        List<String> errors = new ArrayList<>();
+
+        // 1) Validate + parse fields
+        Long id = parseId(idField.getText(), errors);
+        String heroName = nonEmpty(heroNameField.getText(), "Hero name", errors);
+        String realName = nonEmpty(realNameField.getText(), "Real name", errors);
+        Integer age = parseAge(ageField.getText(), errors);
+        Double rating = parseRating(ratingField.getText(), errors);
+        boolean isActive = Boolean.parseBoolean(activeField.getText());
+        String description = nonEmpty(descriptionField.getText(), "Description", errors);
+        String strengthBase = nonEmpty(strengthBaseField.getText(), "Strength base", errors);
+
+        // Unique ID check
+        if (id != null && heroes.stream().anyMatch(h -> Objects.equals(h.getId(), id))) {
+            errors.add("A hero with ID " + id + " already exists.");
+        }
+
+        if (!errors.isEmpty()) {
+            showAnnouncementCreate(String.join("\n", errors), false);
+            return;
+        }
+
+        Hero newHero = Hero.builder()
+                .id(id)
+                .heroName(heroName)
+                .realName(realName)
+                .heroHeadshot("https://unsplash.com/" + heroName)
+                .age(age)
+                .rating(rating)
+                .isActive(isActive)
+                .description(description)
+                .strengthBase(strengthBase)
+                .build();
+
+        heroes.add(newHero);
+        overwriteOriginalFile();
+
+        heroesObs.add(newHero);
+        createTable.refresh();
+
+        showAnnouncementCreate("Created hero “" + heroName + "” (ID " + id + ") successfully.", true);
+        clearInputs();
     }
 
     public void showHeroes(List<Hero> heroes) {
@@ -448,7 +642,7 @@ public class Controller implements Initializable {
         return 0;
     }
 
-        /*
+    /*
         heroDelete
         this method searches Heroes for matching id  and removes if found then uses fileWrite to reflect
         deletion in text file.
@@ -575,7 +769,7 @@ public class Controller implements Initializable {
         hide.playFromStart();
     }
 
-        /*
+    /*
         batchUpload()
         this method read and writes new records from input file to original db.
         there are no parameters needed for this method
@@ -693,5 +887,26 @@ public class Controller implements Initializable {
     */
     public record ImportResult(int imported, int skippedMalformed, Exception error) {
         boolean ok() { return error == null; }
+    }
+
+    /*
+    showAnnouncementCreate
+    this helper method simply hides and shows messages(errors or completions) on the announcement text field and auto-hides message after 5 sec.
+    the parameters are a message to be displayed and the success status which determines the color the text is outputted
+    the return type is void
+    */
+    private void showAnnouncementCreate(String msg, boolean success) {
+        announcement3.setText(msg);
+        announcement3.setStyle(
+                success
+                        ? "-fx-text-fill: #1b7e22; -fx-font-weight: 600;"
+                        : "-fx-text-fill: #b00020; -fx-font-weight: 600;"
+        );
+        announcement3.setVisible(true);
+
+        // auto-hides announcements after 5s
+        PauseTransition hide = new PauseTransition(Duration.seconds(5));
+        hide.setOnFinished(e -> announcement3.setVisible(false));
+        hide.playFromStart();
     }
 }
