@@ -22,6 +22,8 @@ public class Main extends Application {
 		Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/_3024c/heroregistry/Dashboard.fxml")));
 		primaryStage.initStyle(StageStyle.UNDECORATED);
 
+
+
 		root.setOnMousePressed(event -> {
 			x = event.getSceneX();
 			y = event.getSceneY();

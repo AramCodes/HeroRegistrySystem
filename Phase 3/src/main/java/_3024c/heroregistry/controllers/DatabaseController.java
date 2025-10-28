@@ -65,6 +65,7 @@ public class DatabaseController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         slider.setTranslateX(0);
         menuClose.setVisible(true);
 
