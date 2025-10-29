@@ -36,6 +36,10 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
 
+/*
+    This class contains all the logic for the dash page its startup and button clicks on it. This serves as the main class containing all the logic behind
+    the functionality
+ */
 public class Controller implements Initializable {
 
     private final List<Hero> heroes = new ArrayList<>();

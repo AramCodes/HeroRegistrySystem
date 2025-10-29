@@ -23,7 +23,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static _3024c.heroregistry.controllers.Controller.goToDb;
-
+/*
+    This contains all the logic for the database page its startup and button clicks on it page
+ */
 public class DatabaseController implements Initializable {
 
     @FXML

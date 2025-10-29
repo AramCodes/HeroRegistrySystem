@@ -78,6 +78,18 @@
                <children>
                   <VBox layoutY="55.0" prefHeight="200.0" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="55.0">
                      <children>
+                        <Button fx:id="btnRead" alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="56.0" prefWidth="200.0" styleClass="sidebarItem" text="Read" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="icons">
+                                 <image>
+                                    <Image url="@Images/read.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
                         <Button fx:id="btnDisplay" alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="38.0" prefWidth="200.0" styleClass="sidebarItem" text="Display" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="15.0" />
@@ -133,17 +145,6 @@
                                     <Image url="@Images/report.png" />
                                  </image>
                               </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="btnRead" alignment="BASELINE_LEFT" lineSpacing="10.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="38.0" prefWidth="200.0" styleClass="sidebarItem" text="Read" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                           <graphic>
-                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="icons">
-                                 <image>
-                                    <Image url="@Images/read.png" />
-                                 </image></ImageView>
                            </graphic>
                         </Button>
                      </children>
@@ -363,6 +364,11 @@
                                        </font>
                                     </Label>
                                     <Label text="Real Name">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="10.0" layoutY="80.0" text="Heros Headshot">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
