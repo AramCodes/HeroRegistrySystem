@@ -7,6 +7,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 //import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+/* Aram Valcourt
+   CEN 3024C
+   10/28/2025
+   SOFTWARE DEVELOPMENT I
+   Main Class running the HRS; The HRS purpose is to enable management and registry of the Hero HQ's heroes through a
+   JavaFx driven app to allow C.R.U.D functionality and one custom methods
+*/
+
+
 //Icons thanks to Icons8
 //<a target="_blank" href="https://icons8.com/icon/c3Z8IwwzvmWR/upload">Upload</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 
@@ -39,6 +49,11 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 
+    /*  Main method
+        contains the logic to trigger the launch of the HRS
+        the parameter args takes in array of strings
+        the return type is void.
+    */
 	public static void main(String[] args) {
         launch(args);
 	}

@@ -19,8 +19,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -43,6 +41,8 @@ public class Controller implements Initializable {
     private final List<Hero> heroes = new ArrayList<>();
     private final ObservableList<Hero> heroesObs = FXCollections.observableArrayList();
     private long curId;
+    private Hero   loadedHero = null; // reference to the found hero
+    private int    loadedIndex = -1;
 
     @FXML
     private Button btnDash;
@@ -85,6 +85,8 @@ public class Controller implements Initializable {
 
     @FXML
     private Button actionUpdate;
+
+    @FXML private TextField  announcement4;
 
     @FXML
     private ImageView exit;
@@ -158,28 +160,28 @@ public class Controller implements Initializable {
     private AnchorPane slider;
 
     @FXML
-    private TableColumn<?, ?> colActive;
+    private TableColumn<Hero, Boolean> colActive;
 
     @FXML
-    private TableColumn<?, ?> colAge;
+    private TableColumn<Hero, Integer> colAge;
 
     @FXML
-    private TableColumn<?, ?> colDescription;
+    private TableColumn<Hero, String> colDescription;
 
     @FXML
-    private TableColumn<?, ?> colHeroName;
+    private TableColumn<Hero, String> colHeroName;
 
     @FXML
-    private TableColumn<?, ?> colId;
+    private TableColumn<Hero, Integer> colId;
 
     @FXML
-    private TableColumn<?, ?> colRating;
+    private TableColumn<Hero, Double> colRating;
 
     @FXML
-    private TableColumn<?, ?> colRealName;
+    private TableColumn<Hero, String> colRealName;
 
     @FXML
-    private TableColumn<?, ?> colStrengthBase;
+    private TableColumn<Hero, String> colStrengthBase;
 
     @FXML
     private TableView<Hero> createTable;
@@ -208,7 +210,50 @@ public class Controller implements Initializable {
     @FXML
     private TextField strengthBaseField;
 
+    @FXML private TextField fieldId;              // only enabled initially
+    @FXML private TextField fieldHeroesName;      // rest start disabled
+    @FXML private TextField fieldRealName;
+    @FXML private TextField fieldHeadshot;
+    @FXML private TextField fieldAge;
+    @FXML private TextField fieldRating;
+    @FXML private TextField fieldDescription;
+    @FXML private TextField fieldStrengthBase;
+    @FXML private TextField  fieldActive;
 
+    @FXML private TableView<Hero> thirdTable;
+
+    @FXML
+    private TableColumn<Hero, Boolean> active;
+
+    @FXML
+    private TableColumn<Hero, Integer> age;
+
+    @FXML
+    private TableColumn<Hero, String> description;
+
+    @FXML
+    private TableColumn<Hero, String> heroName;
+
+    @FXML
+    private TableColumn<Hero, Integer> id;
+
+    @FXML
+    private TableColumn<Hero, Double> rating;
+
+    @FXML
+    private TableColumn<Hero, String> realName;
+
+    @FXML
+    private TableColumn<Hero, String> strengthBase;
+
+
+    /*
+        initialize()
+        this overridden and necessary method helps to set the stage to wanted values and set important rules
+        the parameter is the url to the fxml page and the resourceBundle are key value pair loaded from .yaml
+        or .properties page
+        the return type is void
+    */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         pnDisplay.toFront(); //make sure this is the first page to see
@@ -268,6 +313,25 @@ public class Controller implements Initializable {
         heroesObs.setAll(heroes);
         createTable.setItems(heroesObs);
 
+        //third table create
+        id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        heroName.setCellValueFactory(new PropertyValueFactory<>("heroName"));
+        realName.setCellValueFactory(new PropertyValueFactory<>("realName"));
+        age.setCellValueFactory(new PropertyValueFactory<>("age"));
+        rating.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        active.setCellValueFactory(new PropertyValueFactory<>("active"));
+        description.setCellValueFactory(new PropertyValueFactory<>("description"));
+        strengthBase.setCellValueFactory(new PropertyValueFactory<>("strengthBase"));
+
+        heroesObs.setAll(heroes);
+        thirdTable.setItems(heroesObs);
+
+        setEditableFieldsEnabled(false);
+
+        fieldId.textProperty().addListener((obs, oldV, newV) -> onIdTyped(newV));
+
+        Platform.runLater(() -> fieldId.requestFocus());
+
         slider.setTranslateX(0);
         menuClose.setVisible(true);
 
@@ -285,6 +349,109 @@ public class Controller implements Initializable {
         menuClose.setOnMouseClicked(toggleMenu);
     }
 
+    /*
+        onIdTyped()
+        this method validates Id as it is being typed
+        the parameter is string being entered
+        the return type is void
+    */
+    private void onIdTyped(String txt) {
+
+        if (txt == null || !txt.matches("\\d{7}")) {
+            loadedHero = null;
+            loadedIndex = -1;
+            setEditableFieldsEnabled(false);
+            clearNonIdFields();
+            showAnnouncementUpdate("Enter a 7-digit ID to search.", false);
+            return;
+        }
+
+        long id = Long.parseLong(txt);
+        int idx = -1;
+        for (int i = 0; i < heroes.size(); i++) {
+            if (Objects.equals(heroes.get(i).getId(), id)) {
+                idx = i;
+                break;
+            }
+        }
+
+        if (idx < 0) {
+            loadedHero = null;
+            loadedIndex = -1;
+            setEditableFieldsEnabled(false);
+            clearNonIdFields();
+            showAnnouncementUpdate("No hero found with ID " + id + ".", false);
+        } else {
+            loadedHero = heroes.get(idx);
+            loadedIndex = idx;
+            setEditableFieldsEnabled(true);
+            populateFieldsFromHero(loadedHero);
+            showAnnouncementUpdate("Loaded hero with ID " + id + ". You can edit the fields now.", true);
+
+            fieldId.setDisable(true);
+        }
+    }
+
+    /*
+        setEditableFieldsEnabled()
+        this helper method helps increase the UX by decreasing confusion when of when data is needed vs being processed
+        the parameter is enabled a boolean that confirms switch
+        the return type is void
+    */
+    private void setEditableFieldsEnabled(boolean enabled) {
+        fieldHeroesName.setDisable(!enabled);
+        fieldRealName.setDisable(!enabled);
+        fieldHeadshot.setDisable(!enabled);
+        fieldAge.setDisable(!enabled);
+        fieldRating.setDisable(!enabled);
+        fieldDescription.setDisable(!enabled);
+        fieldStrengthBase.setDisable(!enabled);
+        fieldActive.setDisable(!enabled);
+        actionUpdate.setDisable(!enabled);
+    }
+
+    /*
+        populateFieldsFromHero()
+        this helper method helps increase the UX by populating existing hero data into update field so
+        that user doesn't have to retype everything and can simply edit the parts that need to be changed
+        the parameter is the found hero obj
+        the return type is void
+    */
+    private void populateFieldsFromHero(Hero h) {
+        fieldHeroesName.setText(safe(h.getHeroName()));
+        fieldRealName.setText(safe(h.getRealName()));
+        fieldHeadshot.setText(safe(h.getHeroHeadshot()));
+        fieldAge.setText(String.valueOf(h.getAge()));
+        fieldRating.setText(String.valueOf(h.getRating()));
+        fieldDescription.setText(safe(h.getDescription()));
+        fieldStrengthBase.setText(safe(h.getStrengthBase()));
+        fieldActive.setText(String.valueOf(h.isActive()));
+    }
+
+    /*
+        clearNonIdFields()
+        this helper method helps ensure operations cleaned after
+        there are no parameters
+        the return type is void
+    */
+    private void clearNonIdFields() {
+        fieldHeroesName.clear();
+        fieldRealName.clear();
+        fieldHeadshot.clear();
+        fieldAge.clear();
+        fieldRating.clear();
+        fieldDescription.clear();
+        fieldStrengthBase.clear();
+        fieldActive.clear();
+    }
+    private String safe(String s) { return s == null ? "" : s; }
+
+    /*
+        parseId()
+        this helper method helps parse inputs to ensure operations are completed without error
+        the parameters are txt from input and a list of errors
+        the return type is a long
+    */
     private Long parseId(String txt, List<String> errors) {
         if (txt == null || !txt.matches("\\d{7}")) {
             errors.add("Hero ID must be exactly 7 digits (e.g., 1234567).");
@@ -298,6 +465,12 @@ public class Controller implements Initializable {
         }
     }
 
+    /*
+        nonEmpty()
+        this helper method helps sanitize inputs to ensure operations are completed without error
+        the parameters are txt from input, a label and a list of errors
+        the return type is the same string trimmed of external whitespace if it passes the test
+    */
     private String nonEmpty(String txt, String label, List<String> errors) {
         if (txt == null || txt.trim().isEmpty()) {
             errors.add(label + " cannot be empty.");
@@ -306,6 +479,12 @@ public class Controller implements Initializable {
         return txt.trim();
     }
 
+    /*
+    validUrl()
+    this helper method helps sanitize inputs to ensure operations are completed without error
+    the parameters are txt from input, a label and a list of errors
+    the return type is the same string if it passes all test
+    */
     private String validUrl(String txt, String label, List<String> errors) {
         String v = nonEmpty(txt, label, errors);
         if (v == null) return null;
@@ -317,6 +496,12 @@ public class Controller implements Initializable {
         return v;
     }
 
+    /*
+        parseAge()
+        this helper method helps parse inputs to ensure operations are completed without error
+        the parameters are txt from input and a list of errors
+        the return type is the corrected integer
+    */
     private Integer parseAge(String txt, List<String> errors) {
         String v = nonEmpty(txt, "Age", errors);
         if (v == null) return null;
@@ -333,6 +518,12 @@ public class Controller implements Initializable {
         }
     }
 
+    /*
+        parseRating()
+        this helper method helps parse inputs to ensure operations are completed without error
+        the parameters are txt from input and a list of errors
+        the return type is the corrected double
+    */
     private Double parseRating(String txt, List<String> errors) {
         String v = nonEmpty(txt, "Rating", errors);
         if (v == null) return null;
@@ -349,6 +540,12 @@ public class Controller implements Initializable {
         }
     }
 
+    /*
+        clearInputs()
+        this helper method clears text fields after operations are complete
+        there are no parameter
+        the return type is void
+    */
     private void clearInputs() {
         idField.clear();
         heroNameField.clear();
@@ -360,6 +557,12 @@ public class Controller implements Initializable {
         activeField.clear();
     }
 
+    /*
+        handleClicks()
+        this method dispatches the correct panel switch  according to button via event object and a switch case
+        the parameter is the action event
+        the return type is void
+    */
     @FXML
     private void handleClicks(ActionEvent event) throws Exception {
         Object src = event.getSource();
@@ -405,6 +608,12 @@ public class Controller implements Initializable {
         }
     }
 
+    /*
+        handleActions()
+        this method dispatches the correct actions via event object and a switch case
+        the parameter is the action event
+        the return type is void
+    */
     @FXML
     private void handleActions(ActionEvent event){
         Object src = event.getSource();
@@ -460,8 +669,50 @@ public class Controller implements Initializable {
 
                 break;
 
-            case "btnU":
-                //TODO
+            case "actionUpdate":
+                if (loadedHero == null || loadedIndex < 0) {
+                    showAnnouncementUpdate("No hero is loaded. Enter a valid 7-digit ID first.", false);
+                    return;
+                }
+
+                List<String> errors = new ArrayList<>();
+
+                String heroName     = nonEmpty(fieldHeroesName.getText(), "Hero name", errors);
+                String realName     = nonEmpty(fieldRealName.getText(), "Real name", errors);
+                String headshot     = validUrl(fieldHeadshot.getText(), "Headshot URL", errors);
+                Integer age         = parseAge(fieldAge.getText(), errors);
+                Double rating       = parseRating(fieldRating.getText(), errors);
+                boolean isActive    = Boolean.parseBoolean(fieldActive.getText());
+                String description  = nonEmpty(fieldDescription.getText(), "Description", errors);
+                String strengthBase = nonEmpty(fieldStrengthBase.getText(), "Strength base", errors);
+
+                if (!errors.isEmpty()) {
+                    showAnnouncementUpdate(String.join("\n", errors), false);
+                    return;
+                }
+
+                long id = loadedHero.getId();
+
+                Hero updated = Hero.builder()
+                        .id(id)
+                        .heroName(heroName)
+                        .realName(realName)
+                        .heroHeadshot(headshot)
+                        .age(age)
+                        .rating(rating)
+                        .isActive(isActive)
+                        .description(description)
+                        .strengthBase(strengthBase)
+                        .build();
+
+                heroes.set(loadedIndex, updated);
+                overwriteOriginalFile();
+
+                heroesObs.set(loadedIndex, updated);
+                thirdTable.refresh();
+
+                showAnnouncementUpdate("Updated hero ID " + id + " successfully.", true);
+
                 break;
 
             case "actionAverage":
@@ -487,10 +738,15 @@ public class Controller implements Initializable {
         }
     }
 
+    /*
+        createHero()
+        this method creates a heroe object and places it in heroes table then overwrite it to the file
+        the parameter is the action event
+        the return type is void
+    */
     public void createHero(ActionEvent event) {
         List<String> errors = new ArrayList<>();
 
-        // 1) Validate + parse fields
         Long id = parseId(idField.getText(), errors);
         String heroName = nonEmpty(heroNameField.getText(), "Hero name", errors);
         String realName = nonEmpty(realNameField.getText(), "Real name", errors);
@@ -500,7 +756,6 @@ public class Controller implements Initializable {
         String description = nonEmpty(descriptionField.getText(), "Description", errors);
         String strengthBase = nonEmpty(strengthBaseField.getText(), "Strength base", errors);
 
-        // Unique ID check
         if (id != null && heroes.stream().anyMatch(h -> Objects.equals(h.getId(), id))) {
             errors.add("A hero with ID " + id + " already exists.");
         }
@@ -532,10 +787,23 @@ public class Controller implements Initializable {
         clearInputs();
     }
 
+
+    /*
+        showHeroes()
+        this method takes in a list of Hero types and make them visible on fx tables
+        the parameter is a list of Heroes
+        the return type is void
+    */
     public void showHeroes(List<Hero> heroes) {
         heroTable.setItems(FXCollections.observableArrayList(heroes));
     }
 
+    /*
+        goToDb()
+        this method goes to the database login page
+        the parameter is the action event object
+        the return type is void
+    */
     public static void goToDb(ActionEvent event) throws Exception {
         FXMLLoader loader = new FXMLLoader(Controller.class.getResource("/_3024c/heroregistry/Database.fxml"));
         Parent root = loader.load();
@@ -907,6 +1175,59 @@ public class Controller implements Initializable {
         // auto-hides announcements after 5s
         PauseTransition hide = new PauseTransition(Duration.seconds(5));
         hide.setOnFinished(e -> announcement3.setVisible(false));
+        hide.playFromStart();
+    }
+
+    /*
+        addHero
+        this helper method simply takes in a built hero and places it in heroes array and writes array to file
+        the parameters are a message to be displayed and the success status which determines the color the text is outputted
+        the return type is void
+    */
+    public String addHero(Hero hero) {
+        heroes.add(hero);
+        overwriteOriginalFile();
+
+        return hero.getHeroName() + " has been added to the Hero Registry System";
+    }
+
+    /*
+        makeHero
+        this helper method simply takes in all data points to build a hero
+        the parameters are all the 9 fields of a hero object
+        the return type is the built hero
+    */
+    public Hero makeHero(long id, String heroName, String realName, String heroHeadshot, int age, double rating, boolean isActive, String description, String strengthBase) {
+
+        return Hero.builder()
+                .id(id)
+                .heroName(heroName)
+                .realName(realName)
+                .heroHeadshot(heroHeadshot)
+                .age(age)
+                .rating(rating)
+                .isActive(isActive)
+                .description(description)
+                .strengthBase(strengthBase)
+                .build();
+    }
+
+    /*
+        showAnnouncementUpdate
+        this helper method simply hides and shows messages(errors or completions) on the announcement text field and auto-hides message after 5 sec.
+        the parameters are a message to be displayed and the success status which determines the color the text is outputted
+        the return type is void
+    */
+    private void showAnnouncementUpdate(String message, boolean success) {
+        announcement4.setText(message);
+        announcement4.setStyle(success
+                ? "-fx-text-fill: #1f8f36; -fx-background-color: rgba(31,143,54,0.10); -fx-padding: 8; -fx-background-radius: 6;"
+                : "-fx-text-fill: #c62828; -fx-background-color: rgba(198,40,40,0.10); -fx-padding: 8; -fx-background-radius: 6;");
+        announcement4.setVisible(true);
+
+        // auto-hides announcements after 5s
+        PauseTransition hide = new PauseTransition(Duration.seconds(5));
+        hide.setOnFinished(e -> announcement2.setVisible(false));
         hide.playFromStart();
     }
 }
