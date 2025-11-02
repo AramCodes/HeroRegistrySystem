@@ -44,45 +44,12 @@ public class Controller implements Initializable {
 
     private final List<Hero> heroes = new ArrayList<>();
     private final ObservableList<Hero> heroesObs = FXCollections.observableArrayList();
-    private long curId;
-    private Hero   loadedHero = null; // reference to the found hero
-    private int    loadedIndex = -1;
-
-    @FXML
-    private Button btnDash;
-
-    @FXML
-    private Button btnData;
-
-    @FXML
-    private Button btnAverage;
-
-    @FXML
-    private Button btnCreate;
-
-    @FXML
-    private Button btnDisplay;
-
-    @FXML
-    private Button btnRead;
-
-    @FXML
-    private Button btnRemove;
-
-    @FXML
-    private Button btnUpdate;
-
-    @FXML
-    private Button actionAverage;
+    private Hero loadedHero = null; // reference to the found hero
+    private int loadedIndex = -1;
+    private int index;
 
     @FXML
     private Button actionCreate;
-
-    @FXML
-    private Button actionDelete;
-
-    @FXML
-    private Button actionDisplay;
 
     @FXML
     private Button actionImport;
@@ -176,13 +143,16 @@ public class Controller implements Initializable {
     private TableColumn<Hero, String> colHeroName;
 
     @FXML
-    private TableColumn<Hero, Integer> colId;
+    private TableColumn<Hero, Long> colId;
 
     @FXML
     private TableColumn<Hero, Double> colRating;
 
     @FXML
     private TableColumn<Hero, String> colRealName;
+
+    @FXML
+    private TableColumn<Hero, String> colHeadshot;
 
     @FXML
     private TableColumn<Hero, String> colStrengthBase;
@@ -239,7 +209,7 @@ public class Controller implements Initializable {
     private TableColumn<Hero, String> heroName;
 
     @FXML
-    private TableColumn<Hero, Integer> id;
+    private TableColumn<Hero, Long> id;
 
     @FXML
     private TableColumn<Hero, Double> rating;
@@ -248,7 +218,38 @@ public class Controller implements Initializable {
     private TableColumn<Hero, String> realName;
 
     @FXML
+    private TableColumn<Hero, String> headshot;
+
+    @FXML
     private TableColumn<Hero, String> strengthBase;
+
+    @FXML
+    private TableView<Hero> deleteTable;
+
+    @FXML
+    private TableColumn<Hero, Long> id1;
+
+    @FXML
+    private TableColumn<Hero, String> heroName1;
+
+    @FXML
+    private TableColumn<Hero, String> realName1;
+
+    @FXML
+    private TableColumn<Hero, String> headshot1;
+
+    @FXML TableColumn<Hero, Integer> age1;
+
+    @FXML TableColumn<Hero, Double>  rating1;
+
+    @FXML TableColumn<Hero, Boolean> active1;
+
+    @FXML TableColumn<Hero, String>  description1;
+
+    @FXML TableColumn<Hero, String>  strengthBase1;
+
+
+
 
 
     /*
@@ -304,10 +305,13 @@ public class Controller implements Initializable {
             }
         });
 
+
+        createTable.setItems(FXCollections.observableArrayList(heroes));
         //second table create
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colHeroName.setCellValueFactory(new PropertyValueFactory<>("heroName"));
         colRealName.setCellValueFactory(new PropertyValueFactory<>("realName"));
+        colHeadshot.setCellValueFactory(new PropertyValueFactory<>("heroHeadshot"));
         colAge.setCellValueFactory(new PropertyValueFactory<>("age"));
         colRating.setCellValueFactory(new PropertyValueFactory<>("rating"));
         colActive.setCellValueFactory(new PropertyValueFactory<>("active"));
@@ -317,18 +321,35 @@ public class Controller implements Initializable {
         heroesObs.setAll(heroes);
         createTable.setItems(heroesObs);
 
+        thirdTable.setItems(FXCollections.observableArrayList(heroes));
+        announcement4.setVisible(false);
+
         //third table create
         id.setCellValueFactory(new PropertyValueFactory<>("id"));
         heroName.setCellValueFactory(new PropertyValueFactory<>("heroName"));
         realName.setCellValueFactory(new PropertyValueFactory<>("realName"));
+        headshot.setCellValueFactory(new PropertyValueFactory<>("heroHeadshot"));
         age.setCellValueFactory(new PropertyValueFactory<>("age"));
         rating.setCellValueFactory(new PropertyValueFactory<>("rating"));
         active.setCellValueFactory(new PropertyValueFactory<>("active"));
         description.setCellValueFactory(new PropertyValueFactory<>("description"));
         strengthBase.setCellValueFactory(new PropertyValueFactory<>("strengthBase"));
 
-        heroesObs.setAll(heroes);
-        thirdTable.setItems(heroesObs);
+//        heroesObs.setAll(heroes);
+//        thirdTable.setItems(heroesObs);
+
+        deleteTable.setItems(FXCollections.observableArrayList(heroes));
+//        deleteTable.setItems(heroesObs);
+        id1.setCellValueFactory(new PropertyValueFactory<>("id"));
+        heroName1.setCellValueFactory(new PropertyValueFactory<>("heroName"));
+        realName1.setCellValueFactory(new PropertyValueFactory<>("realName"));
+        headshot1.setCellValueFactory(new PropertyValueFactory<>("heroHeadshot"));
+        age1.setCellValueFactory(new PropertyValueFactory<>("age"));
+        rating1.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        active1.setCellValueFactory(new PropertyValueFactory<>("active"));
+        description1.setCellValueFactory(new PropertyValueFactory<>("description"));
+        strengthBase1.setCellValueFactory(new PropertyValueFactory<>("strengthBase"));
+
 
         setEditableFieldsEnabled(false);
 
@@ -493,7 +514,7 @@ public class Controller implements Initializable {
         String v = nonEmpty(txt, label, errors);
         if (v == null) return null;
         // Light URL check
-        if (!v.matches("^(https?|ftp)://[^\\s]+$")) {
+        if (!v.matches("^(https?|ftp)://\\S+$")) {
             errors.add(label + " must start with http:// or https://");
             return null;
         }
@@ -570,9 +591,7 @@ public class Controller implements Initializable {
     @FXML
     private void handleClicks(ActionEvent event) throws Exception {
         Object src = event.getSource();
-        if (!(src instanceof Button)) return;
-
-        Button btn = (Button) src;
+        if (!(src instanceof Button btn)) return;
 
 
         String key = (btn.getId() != null && !btn.getId().isBlank())
@@ -621,9 +640,7 @@ public class Controller implements Initializable {
     @FXML
     private void handleActions(ActionEvent event){
         Object src = event.getSource();
-        if (!(src instanceof Button)) return;
-
-        Button btn = (Button) src;
+        if (!(src instanceof Button btn)) return;
 
         switch (btn.getId()) {
             case "actionImport":
@@ -665,7 +682,7 @@ public class Controller implements Initializable {
 
             case "actionDelete":
                 try{
-                    curId = Long.parseLong(searchBar.getText());
+                    long curId = Long.parseLong(searchBar.getText());
                     heroDelete(curId);
                 } catch (NumberFormatException e) {
                     showAnnouncement("Enter a numeric 7-digit ID.", false);
@@ -740,6 +757,40 @@ public class Controller implements Initializable {
                 // TODO: unknown button
                 break;
         }
+    }
+
+    /*
+    getAttributes() //for update
+    this method allow the selection of an object's attributes through mose click on the selected table view
+    the parameter is the mouse event
+    the return type is void
+    */
+    @FXML
+    void getAttributes(MouseEvent event) {
+        index = thirdTable.getSelectionModel().getSelectedIndex();
+
+        if(index <= -1){
+            return;
+        }
+
+        fieldId.setText(id.getCellData(index).toString());
+    }
+
+    /*
+        getAttribute() //for delete
+        this method allow the selection of an object's attributes through mose click on the selected table view
+        the parameter is the mouse event
+        the return type is void
+    */
+    @FXML
+    void getAttribute(MouseEvent event) {
+        index = deleteTable.getSelectionModel().getSelectedIndex();
+
+        if(index <= -1){
+            return;
+        }
+
+        searchBar.setText(id1.getCellData(index).toString());
     }
 
     /*
@@ -1055,13 +1106,14 @@ public class Controller implements Initializable {
         int skippedMalformed = 0;
 
         try {
+            Path path = Paths.get("");
             if (!importPath.isAbsolute()) {
-                importPath = Paths.get("").toAbsolutePath().resolve(importPath);
+                importPath = path.toAbsolutePath().resolve(importPath);
             }
 
             if (!Files.isRegularFile(importPath) || !Files.isReadable(importPath)) {
                 return new ImportResult(importedCount, skippedMalformed,
-                        new IOException("Cannot read: " + importPath + " (cwd: " + Paths.get("").toAbsolutePath() + ")"));
+                        new IOException("Cannot read: " + importPath + " (cwd: " + path.toAbsolutePath() + ")"));
             }
 
             try (Stream<String> lines = Files.lines(importPath, StandardCharsets.UTF_8)) {
@@ -1140,8 +1192,8 @@ public class Controller implements Initializable {
         announcement2.setText(msg);
         announcement2.setStyle(
                 success
-                        ? "-fx-text-fill: #1b7e22; -fx-font-weight: 600;"
-                        : "-fx-text-fill: #b00020; -fx-font-weight: 600;"
+                        ? "-fx-text-fill: #1f8f36; -fx-background-color: rgba(31,143,54,0.10); -fx-padding: 8; -fx-background-radius: 6;"
+                        : "-fx-text-fill: #c62828; -fx-background-color: rgba(198,40,40,0.10); -fx-padding: 8; -fx-background-radius: 6;"
         );
         announcement2.setVisible(true);
 
@@ -1171,8 +1223,8 @@ public class Controller implements Initializable {
         announcement3.setText(msg);
         announcement3.setStyle(
                 success
-                        ? "-fx-text-fill: #1b7e22; -fx-font-weight: 600;"
-                        : "-fx-text-fill: #b00020; -fx-font-weight: 600;"
+                        ? "-fx-text-fill: #1f8f36; -fx-background-color: rgba(31,143,54,0.10); -fx-padding: 8; -fx-background-radius: 6;"
+                        : "-fx-text-fill: #c62828; -fx-background-color: rgba(198,40,40,0.10); -fx-padding: 8; -fx-background-radius: 6;"
         );
         announcement3.setVisible(true);
 

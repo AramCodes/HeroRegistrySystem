@@ -1,5 +1,6 @@
 package _3024c.heroregistry.controllers;
 
+import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -85,6 +86,12 @@ public class DatabaseController implements Initializable {
         menuClose.setOnMouseClicked(toggleMenu);
     }
 
+    /*
+    goToDash()
+    this method goes to the main dashboard
+    the parameter is the action event object
+    the return type is void
+*/
     public static void goToDash(ActionEvent event) throws Exception {
         FXMLLoader loader = new FXMLLoader(DatabaseController.class.getResource("/_3024c/heroregistry/Dashboard.fxml"));
         Parent root = loader.load();
@@ -92,5 +99,26 @@ public class DatabaseController implements Initializable {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
+    }
+
+    /*
+    showDbStatus
+    this helper method simply hides and shows messages(errors or completions) on the announcement text field and auto-hides message after 5 sec.
+    the parameters are a message to be displayed and the success status which determines the color the text is outputted
+    the return type is void
+*/
+    private void showDbStatus(String msg, boolean success) {
+        statusLabel.setText(msg);
+        statusLabel.setStyle(
+                success
+                        ? "-fx-text-fill: #1f8f36; -fx-background-color: rgba(31,143,54,0.10); -fx-padding: 8; -fx-background-radius: 6;"
+                        : "-fx-text-fill: #c62828; -fx-background-color: rgba(198,40,40,0.10); -fx-padding: 8; -fx-background-radius: 6;"
+        );
+        statusLabel.setVisible(true);
+
+        // auto-hides announcements after 5s
+        PauseTransition hide = new PauseTransition(Duration.seconds(5));
+        hide.setOnFinished(e -> statusLabel.setVisible(false));
+        hide.playFromStart();
     }
 }

@@ -180,21 +180,6 @@
                         </TextField>
                      </children>
                   </Pane>
-                  <Pane fx:id="pnRemove" layoutX="10.0" layoutY="10.0" prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #FFF;">
-                     <children>
-                        <Label layoutX="296.0" layoutY="288.0" text="What is the Id of the Hero you want to  delete?">
-                           <font>
-                              <Font name="System Bold Italic" size="16.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="searchBar" layoutX="661.0" layoutY="286.0" prefHeight="30.0" prefWidth="149.0" />
-                        <Button fx:id="actionDelete" layoutX="497.0" layoutY="343.0" mnemonicParsing="false" onAction="#handleActions" prefHeight="60.0" prefWidth="147.0" styleClass="actionBtn" text="Delete " />
-                        <TextField fx:id="announcement" layoutX="222.0" layoutY="219.0" prefHeight="25.0" prefWidth="715.0" visible="false">
-                           <font>
-                              <Font name="System Bold Italic" size="18.0" />
-                           </font></TextField>
-                     </children>
-                  </Pane>
                   <GridPane fx:id="pnDisplay" prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #fff;" styleClass="grid">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -231,24 +216,25 @@
                      <children>
                         <Pane prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #FFF;">
                            <children>
-                              <TableView fx:id="createTable" layoutX="454.0" layoutY="52.0" prefHeight="270.0" prefWidth="832.0">
+                              <TableView fx:id="createTable" layoutX="368.0" layoutY="52.0" prefHeight="270.0" prefWidth="919.0">
                                 <columns>
-                                  <TableColumn fx:id="colId" prefWidth="52.0" text="Id" />
-                                  <TableColumn fx:id="colHeroName" prefWidth="102.0" text="Hero Name" />
-                                    <TableColumn fx:id="colRealName" prefWidth="100.0" text="Real Name" />
-                                    <TableColumn fx:id="colAge" prefWidth="50.0" text="Age" />
-                                    <TableColumn fx:id="colRating" prefWidth="45.0" text="Rating" />
-                                    <TableColumn fx:id="colActive" minWidth="0.0" prefWidth="49.0" text="Active" />
-                                    <TableColumn fx:id="colDescription" prefWidth="328.0" text="Description" />
-                                    <TableColumn fx:id="colStrengthBase" editable="false" prefWidth="105.0" text="Strength Base" />
+                                  <TableColumn fx:id="colId" editable="false" prefWidth="59.0" text="Id" />
+                                  <TableColumn fx:id="colHeroName" editable="false" prefWidth="95.0" text="Hero Name" />
+                                    <TableColumn fx:id="colRealName" editable="false" prefWidth="100.0" text="Real Name" />
+                                    <TableColumn fx:id="colHeadshot" editable="false" prefWidth="118.0" text="Hero Headshot" />
+                                    <TableColumn fx:id="colAge" editable="false" prefWidth="42.0" text="Age" />
+                                    <TableColumn fx:id="colRating" editable="false" prefWidth="51.0" text="Rating" />
+                                    <TableColumn fx:id="colActive" editable="false" minWidth="0.0" prefWidth="51.0" text="Active" />
+                                    <TableColumn fx:id="colDescription" editable="false" prefWidth="275.0" text="Description" />
+                                    <TableColumn fx:id="colStrengthBase" editable="false" prefWidth="126.0" text="Strength Base" />
                                 </columns>
                               </TableView>
-                              <VBox focusTraversable="true" layoutX="168.0" layoutY="52.0" prefHeight="270.0" prefWidth="247.0" spacing="10.0">
+                              <VBox focusTraversable="true" layoutX="168.0" layoutY="52.0" prefHeight="270.0" prefWidth="191.0" spacing="10.0">
                                  <children>
                                     <TextField fx:id="idField" alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="200.0" VBox.vgrow="SOMETIMES" />
                                     <TextField fx:id="heroNameField" alignment="CENTER" layoutX="10.0" layoutY="10.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="200.0" VBox.vgrow="SOMETIMES" />
                                     <TextField fx:id="realNameField" alignment="CENTER" layoutX="10.0" layoutY="35.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="275.0" VBox.vgrow="SOMETIMES" />
-                                    <TextField fx:id="ageField" alignment="CENTER" layoutX="10.0" layoutY="60.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="200.0" VBox.vgrow="SOMETIMES" />
+                                    <TextField fx:id="ageField" alignment="CENTER" layoutX="10.0" layoutY="60.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="229.0" VBox.vgrow="SOMETIMES" />
                                     <TextField fx:id="ratingField" alignment="CENTER" layoutX="10.0" layoutY="85.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="200.0" VBox.vgrow="SOMETIMES" />
                                     <TextField fx:id="activeField" alignment="CENTER" layoutX="10.0" layoutY="110.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="200.0" VBox.vgrow="SOMETIMES" />
                                     <TextField fx:id="descriptionField" alignment="CENTER" layoutX="10.0" layoutY="135.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="200.0" VBox.vgrow="SOMETIMES" />
@@ -316,21 +302,21 @@
                         </Pane>
                      </children>
                   </VBox>
-                  <VBox fx:id="pnUpdate" layoutX="10.0" layoutY="10.0" prefHeight="600.0">
+                  <VBox fx:id="pnUpdate" layoutX="10.0" layoutY="10.0" onMouseClicked="#getAttributes" prefHeight="600.0">
                      <children>
                         <Pane prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #FFF;">
                            <children>
-                              <TableView fx:id="thirdTable" layoutX="520.0" layoutY="60.0" prefHeight="270.0" prefWidth="758.0">
+                              <TableView fx:id="thirdTable" layoutX="520.0" layoutY="49.0" onMouseClicked="#getAttributes" prefHeight="310.0" prefWidth="768.0">
                                  <columns>
-                                    <TableColumn fx:id="id" prefWidth="52.0" text="Id" />
-                                    <TableColumn fx:id="heroName" prefWidth="102.0" text="Hero Name" />
-                                    <TableColumn fx:id="realName" prefWidth="100.0" text="Real Name" />
-                                    <TableColumn fx:id="age" prefWidth="50.0" text="Age" />
-                                    <TableColumn fx:id="rating" prefWidth="45.0" text="Rating" />
-                                    <TableColumn fx:id="active" minWidth="0.0" prefWidth="49.0" text="Active" />
-                                    <TableColumn fx:id="description" prefWidth="264.0" text="Description" />
-                                    <TableColumn fx:id="strengthBase" editable="false" prefWidth="95.0" text="Strength Base" />
-                                    <TableColumn editable="false" prefWidth="95.0" text="Strength Base" />
+                                    <TableColumn fx:id="id" prefWidth="48.0" text="Id" />
+                                    <TableColumn fx:id="heroName" editable="false" prefWidth="85.0" text="Hero Name" />
+                                    <TableColumn fx:id="realName" editable="false" text="Real Name" />
+                                    <TableColumn fx:id="headshot" editable="false" prefWidth="69.0" text="Headshot" />
+                                    <TableColumn fx:id="age" prefWidth="36.0" text="Age" />
+                                    <TableColumn fx:id="rating" editable="false" prefWidth="44.0" text="Rating" />
+                                    <TableColumn fx:id="active" editable="false" minWidth="0.0" prefWidth="49.0" text="Active" />
+                                    <TableColumn fx:id="description" minWidth="0.0" prefWidth="205.0" text="Description" />
+                                    <TableColumn fx:id="strengthBase" prefWidth="160.0" text="Strength Base" />
                                  </columns>
                               </TableView>
                               <VBox layoutX="168.0" layoutY="52.0" prefHeight="270.0" prefWidth="333.0" spacing="10.0">
@@ -409,6 +395,35 @@
                         </Pane>
                      </children>
                   </VBox>
+                  <Pane fx:id="pnRemove" layoutX="10.0" layoutY="10.0" prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #FFF;">
+                     <children>
+                        <Label layoutX="215.0" layoutY="640.0" text="What is the Id of the Hero you want to  delete?">
+                           <font>
+                              <Font name="System Bold Italic" size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="searchBar" layoutX="602.0" layoutY="638.0" prefHeight="30.0" prefWidth="149.0" />
+                        <Button fx:id="actionDelete" layoutX="477.0" layoutY="693.0" mnemonicParsing="false" onAction="#handleActions" prefHeight="60.0" prefWidth="147.0" styleClass="actionBtn" text="Delete " />
+                        <TextField fx:id="announcement" layoutX="187.0" layoutY="569.0" prefHeight="25.0" prefWidth="715.0" visible="false">
+                           <font>
+                              <Font name="System Bold Italic" size="18.0" />
+                           </font>
+                        </TextField>
+                        <TableView fx:id="deleteTable" layoutX="37.0" layoutY="113.0" maxHeight="434.0" maxWidth="1174.0" onMouseClicked="#getAttribute" prefHeight="434.0" prefWidth="1174.0">
+                           <columns>
+                              <TableColumn fx:id="id1" prefWidth="75.0" text="Id" />
+                              <TableColumn fx:id="heroName1" editable="false" prefWidth="114.0" text="Hero Name" />
+                              <TableColumn fx:id="realName1" editable="false" prefWidth="136.0" text="Real Name" />
+                              <TableColumn fx:id="headshot1" editable="false" prefWidth="183.0" text="Headshot" />
+                              <TableColumn fx:id="age1" prefWidth="52.0" text="Age" />
+                              <TableColumn fx:id="rating1" editable="false" prefWidth="58.0" text="Rating" />
+                              <TableColumn fx:id="active1" editable="false" minWidth="0.0" prefWidth="55.0" text="Active" />
+                              <TableColumn fx:id="description1" minWidth="0.0" prefWidth="364.0" text="Description" />
+                              <TableColumn fx:id="strengthBase1" prefWidth="134.0" text="Strength Base" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </Pane>
                </children>
             </StackPane>
          </center>
