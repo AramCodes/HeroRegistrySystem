@@ -1,0 +1,24 @@
+module _3024c.heroregistry {
+    requires javafx.controls;
+    requires javafx.fxml;
+
+    requires spring.boot;
+    requires spring.boot.autoconfigure;
+    requires spring.context;
+    requires spring.beans;
+
+    requires java.sql;
+    requires jakarta.persistence;
+
+    requires org.controlsfx.controls;
+    requires static lombok;
+    requires java.desktop;
+
+    exports _3024c.heroregistry;
+
+    opens _3024c.heroregistry to spring.core, spring.beans, spring.context, javafx.fxml;
+    opens _3024c.heroregistry.controllers to javafx.fxml, spring.core, spring.beans;
+
+    opens _3024c.heroregistry.models;
+
+}

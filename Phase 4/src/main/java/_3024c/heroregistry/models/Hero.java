@@ -1,20 +1,27 @@
 package _3024c.heroregistry.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 /*
 This is the main data the application will be centered around
 
  */
+@Entity
+@Table(name = "heroes")
 @Data
 @AllArgsConstructor
 @Builder
 public class Hero {
 
-    private long id;
+    @Id
+    @GeneratedValue
+    private Long id;
     private String heroName;
     private String realName;
     private String heroHeadshot;
@@ -23,4 +30,8 @@ public class Hero {
     private boolean isActive;
     private String description;
     private String strengthBase;
+
+    public Hero() {
+
+    }
 }

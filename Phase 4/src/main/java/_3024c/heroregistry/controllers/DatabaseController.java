@@ -87,6 +87,8 @@ public class DatabaseController implements Initializable {
             goToDash(event);
         } else if (key.equals("btnData")) {
             goToDb(event);
+        } else if (key.equals("connectBtn")) {
+            getConnection();
         }
     }
 

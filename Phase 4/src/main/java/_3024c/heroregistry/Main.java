@@ -28,7 +28,7 @@ public class Main extends Application {
     }
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) {
 		primaryStage.initStyle(StageStyle.UNDECORATED);
 
 
@@ -57,7 +57,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         springContext.close();
     }
 
