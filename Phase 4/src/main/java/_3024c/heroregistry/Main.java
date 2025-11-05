@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
+//Help from YouTube MVP Java "Integrating Spring Boot with JavaFX"
 @SpringBootApplication(proxyBeanMethods = false)
 public class Main extends Application {
 

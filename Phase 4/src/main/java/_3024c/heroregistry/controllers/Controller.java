@@ -452,7 +452,7 @@ public class Controller implements Initializable {
         fieldRating.setText(String.valueOf(h.getRating()));
         fieldDescription.setText(safe(h.getDescription()));
         fieldStrengthBase.setText(safe(h.getStrengthBase()));
-        fieldActive.setText(String.valueOf(h.isActive()));
+        fieldActive.setText(String.valueOf(h.getIsActive()));
     }
 
     /*
@@ -1067,7 +1067,7 @@ public class Controller implements Initializable {
                 hero.getHeroHeadshot(),
                 hero.getAge(),
                 hero.getRating(),
-                hero.isActive(),
+                hero.getIsActive(),
                 hero.getDescription(),
                 hero.getStrengthBase()
         );
