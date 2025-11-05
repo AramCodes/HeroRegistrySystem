@@ -26,9 +26,11 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -175,9 +177,6 @@ public class Controller implements Initializable {
     private TextField heroNameField;
 
     @FXML
-    private TextField idField;
-
-    @FXML
     private TextField descriptionField;
 
     @FXML
@@ -186,8 +185,8 @@ public class Controller implements Initializable {
     @FXML
     private TextField strengthBaseField;
 
-    @FXML private TextField fieldId;              // only enabled initially
-    @FXML private TextField fieldHeroesName;      // rest start disabled
+    @FXML private TextField fieldId;
+    @FXML private TextField fieldHeroesName;
     @FXML private TextField fieldRealName;
     @FXML private TextField fieldHeadshot;
     @FXML private TextField fieldAge;
@@ -250,10 +249,6 @@ public class Controller implements Initializable {
 
     @FXML TableColumn<Hero, String>  strengthBase1;
 
-
-
-
-
     /*
         initialize()
         this overridden and necessary method helps to set the stage to wanted values and set important rules
@@ -272,7 +267,7 @@ public class Controller implements Initializable {
         realNameCol.setCellValueFactory(new PropertyValueFactory<>("realName"));
         ageCol.setCellValueFactory(new PropertyValueFactory<>("age"));
         ratingCol.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        activeCol.setCellValueFactory(new PropertyValueFactory<>("active"));
+        activeCol.setCellValueFactory(new PropertyValueFactory<>("isActive"));
         strengthBaseCol.setCellValueFactory(new PropertyValueFactory<>("strengthBase"));
 
         descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -316,7 +311,7 @@ public class Controller implements Initializable {
         colHeadshot.setCellValueFactory(new PropertyValueFactory<>("heroHeadshot"));
         colAge.setCellValueFactory(new PropertyValueFactory<>("age"));
         colRating.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        colActive.setCellValueFactory(new PropertyValueFactory<>("active"));
+        colActive.setCellValueFactory(new PropertyValueFactory<>("isActive"));
         colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colStrengthBase.setCellValueFactory(new PropertyValueFactory<>("strengthBase"));
 
@@ -333,22 +328,20 @@ public class Controller implements Initializable {
         headshot.setCellValueFactory(new PropertyValueFactory<>("heroHeadshot"));
         age.setCellValueFactory(new PropertyValueFactory<>("age"));
         rating.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        active.setCellValueFactory(new PropertyValueFactory<>("active"));
+        active.setCellValueFactory(new PropertyValueFactory<>("isActive"));
         description.setCellValueFactory(new PropertyValueFactory<>("description"));
         strengthBase.setCellValueFactory(new PropertyValueFactory<>("strengthBase"));
 
-//        heroesObs.setAll(heroes);
-//        thirdTable.setItems(heroesObs);
+;
 
         deleteTable.setItems(FXCollections.observableArrayList(heroes));
-//        deleteTable.setItems(heroesObs);
         id1.setCellValueFactory(new PropertyValueFactory<>("id"));
         heroName1.setCellValueFactory(new PropertyValueFactory<>("heroName"));
         realName1.setCellValueFactory(new PropertyValueFactory<>("realName"));
         headshot1.setCellValueFactory(new PropertyValueFactory<>("heroHeadshot"));
         age1.setCellValueFactory(new PropertyValueFactory<>("age"));
         rating1.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        active1.setCellValueFactory(new PropertyValueFactory<>("active"));
+        active1.setCellValueFactory(new PropertyValueFactory<>("isActive"));
         description1.setCellValueFactory(new PropertyValueFactory<>("description"));
         strengthBase1.setCellValueFactory(new PropertyValueFactory<>("strengthBase"));
 
@@ -574,7 +567,6 @@ public class Controller implements Initializable {
         the return type is void
     */
     private void clearInputs() {
-        idField.clear();
         heroNameField.clear();
         realNameField.clear();
         ageField.clear();
@@ -729,10 +721,10 @@ public class Controller implements Initializable {
                         .build();
 
                 heroes.set(loadedIndex, updated);
-                overwriteOriginalFile();
+                HeroController.updateHero(updated);
 
                 heroesObs.set(loadedIndex, updated);
-                thirdTable.refresh();
+                showHeroes(heroes);
 
                 showAnnouncementUpdate("Updated hero ID " + id + " successfully.", true);
 
@@ -797,14 +789,13 @@ public class Controller implements Initializable {
 
     /*
         createHero()
-        this method creates a heroe object and places it in heroes table then overwrite it to the file
+        this method creates a heroe object and places it in heroes table then change the db
         the parameter is the action event
         the return type is void
     */
     public void createHero(ActionEvent event) {
         List<String> errors = new ArrayList<>();
 
-        Long id = parseId(idField.getText(), errors);
         String heroName = nonEmpty(heroNameField.getText(), "Hero name", errors);
         String realName = nonEmpty(realNameField.getText(), "Real name", errors);
         Integer age = parseAge(ageField.getText(), errors);
@@ -823,7 +814,6 @@ public class Controller implements Initializable {
         }
 
         Hero newHero = Hero.builder()
-                .id(id)
                 .heroName(heroName)
                 .realName(realName)
                 .heroHeadshot("https://unsplash.com/" + heroName)
@@ -834,13 +824,14 @@ public class Controller implements Initializable {
                 .strengthBase(strengthBase)
                 .build();
 
+        HeroController.saveHero(newHero);
         heroes.add(newHero);
-        overwriteOriginalFile();
+
 
         heroesObs.add(newHero);
-        createTable.refresh();
+        showHeroes(heroes);
 
-        showAnnouncementCreate("Created hero “" + heroName + "” (ID " + id + ") successfully.", true);
+        showAnnouncementCreate("Created hero " + newHero.getHeroName() + " successfully.", true);
         clearInputs();
     }
 
@@ -853,6 +844,9 @@ public class Controller implements Initializable {
     */
     public void showHeroes(List<Hero> heroes) {
         heroTable.setItems(FXCollections.observableArrayList(heroes));
+        deleteTable.setItems(FXCollections.observableArrayList(heroes));
+        createTable.setItems(FXCollections.observableArrayList(heroes));
+        thirdTable.setItems(FXCollections.observableArrayList(heroes));
     }
 
     /*
@@ -878,7 +872,6 @@ public class Controller implements Initializable {
     */
     public double getAverageRating() {
         double total = 00.00;
-
         if(heroes.isEmpty()){
             return total;
         }
@@ -925,40 +918,7 @@ public class Controller implements Initializable {
             heroes.clear();
         }
 
-
-        String filePath = "data.txt";
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split("-");
-
-                if (parts.length != 9) { //pseudo-defense to only accept line with 9 parts for the 9 attributes of a hero
-                    System.err.println("Invalid line (skipped): " + line);
-                }
-
-                try {
-                    Hero hero = Hero.builder()
-                            .id(Long.parseLong(parts[0].trim()))
-                            .heroName(parts[1].trim())
-                            .realName(parts[2].trim())
-                            .heroHeadshot(parts[3].trim())
-                            .age(Integer.parseInt(parts[4].trim()))
-                            .rating(Double.parseDouble(parts[5].trim()))
-                            .isActive(Boolean.parseBoolean(parts[6].trim()))
-                            .description(parts[7].trim())
-                            .strengthBase(parts[8].trim())
-                            .build();
-
-                    heroes.add(hero);
-                } catch (NumberFormatException e) {
-                    System.err.println("Failed to parse number in line: " + line);
-                    System.out.println(e.getMessage());
-                }
-            }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-
-        }
+        heroes.addAll(HeroController.getHeroes());
 
         if (!heroes.isEmpty()){
             return heroes.size();
@@ -992,7 +952,7 @@ public class Controller implements Initializable {
 
         Hero removed = heroes.remove(idx);
         try {
-            overwriteOriginalFile(); // updates file after hero removal from array
+            HeroController.deleteHero(id);
         } catch (Exception ex) {
             // rollback array if save to file fails
             heroes.add(idx, removed);
@@ -1019,35 +979,8 @@ public class Controller implements Initializable {
         return id >= 1_000_000L && id <= 9_999_999L;
     }
 
+
     /*
-        overwriteOriginalFile()
-        this method writes and saves the items from heroes list into data file.
-        there are no parameters needed for this method
-        the return type is String
-    */
-    public String overwriteOriginalFile() {
-        String filePath = "data.txt";
-
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
-
-            for (Hero hero : heroes) {
-                String heroLine = formatHeroRecord(hero);
-
-                writer.write(heroLine);
-                writer.newLine();
-            }
-
-            writer.close();
-
-        } catch (IOException e) {
-            System.out.println("Error writing to file. Info: "  + e.getMessage());
-        }
-
-        return "done";
-    }
-
-        /*
         formatHeroRecord
         this method simply converts the Hero Objects into the string format used in files.
         the parameter is an object containing a heroes data
@@ -1104,6 +1037,7 @@ public class Controller implements Initializable {
 
     public ImportResult batchUpload(Path importPath){
         Set<Hero> merged = new LinkedHashSet<>(heroes);
+        List<Hero> newlyParsed = new ArrayList<>();
         int importedCount = 0;
         int skippedMalformed = 0;
 
@@ -1125,7 +1059,9 @@ public class Controller implements Initializable {
 
                     Optional<Hero> parsed = parseHeroFromLine(trimmed);
                     if (parsed.isPresent()) {
-                        if (merged.add(parsed.get())) {
+                        Hero h = parsed.get();
+                        if (merged.add(h)) {
+                            newlyParsed.add(h);
                             importedCount++;
                         }
                     } else {
@@ -1136,7 +1072,18 @@ public class Controller implements Initializable {
 
             heroes.clear();
             heroes.addAll(merged);
-            overwriteOriginalFile();
+
+            int dbSaved = 0, dbFailed = 0;
+            for (Hero h : newlyParsed) {
+                try {
+                    HeroController.updateHero(h);
+                    dbSaved++;
+                } catch (Exception ex) {
+                    dbFailed++;
+                }
+            }
+
+
 
             return new ImportResult(importedCount, skippedMalformed, null);
 
@@ -1244,7 +1191,7 @@ public class Controller implements Initializable {
     */
     public String addHero(Hero hero) {
         heroes.add(hero);
-        overwriteOriginalFile();
+        HeroController.saveHero(hero);
 
         return hero.getHeroName() + " has been added to the Hero Registry System";
     }

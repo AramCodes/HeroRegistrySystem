@@ -1,9 +1,8 @@
 package _3024c.heroregistry.controllers;
 
-import org.hibernate.ObjectNotFoundException;
-import org.owasp.encoder.Encode;
 import _3024c.heroregistry.models.Hero;
 import _3024c.heroregistry.repositories.HeroRepository;
+import org.owasp.encoder.Encode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Controller
@@ -19,7 +17,7 @@ import java.util.Optional;
 public class HeroController {
 
 //    helpers
-    private void sanitizeHero(Hero hero) {
+    private static void sanitizeHero(Hero hero) {
         if (hero == null) return;
 
         if (hero.getHeroName() != null) {
@@ -44,14 +42,14 @@ public class HeroController {
 
     }
 
-    private final HeroRepository repository;
+    private static HeroRepository repository = null;
     public HeroController(HeroRepository repository) {
         this.repository = repository;
     }
 
     // Read
     @GetMapping("/all")
-    public List<Hero> showHeroes(){
+    public static List<Hero> getHeroes(){
 
         return repository.findAll();
     }
@@ -59,10 +57,9 @@ public class HeroController {
 
     //  Create
     @PostMapping("/save")
-    public ResponseEntity saveHero(@RequestBody Hero hero){
+    public static ResponseEntity saveHero(@RequestBody Hero hero){
         sanitizeHero(hero);
         Hero saved = repository.save(hero);
-        sanitizeHero(saved); // ensure returned object is safe
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
@@ -70,7 +67,7 @@ public class HeroController {
     //Update
     //PutMapping("/save")
     @PutMapping("/update")
-    public ResponseEntity updateHero(Hero oldHero){
+    public static ResponseEntity updateHero(Hero oldHero){
         if (oldHero == null || oldHero.getId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Hero and ID must be provided.");
         }
@@ -103,7 +100,7 @@ public class HeroController {
 
     //Delete
     @DeleteMapping("/id/{heroId}")
-    public ResponseEntity<Void> deleteHero(@PathVariable Long heroId) {
+    public static ResponseEntity<Void> deleteHero(@PathVariable Long heroId) {
         if (!repository.existsById(heroId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -1,9 +1,6 @@
 package _3024c.heroregistry.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,23 +19,28 @@ This is the main data the application will be centered around
 public class Hero {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "heroName")
     private String heroName;
 
+    @Column(name = "realName")
     private String realName;
 
+    @Column(name = "heroHeadshot")
     private String heroHeadshot;
 
     private int age;
 
     private double rating;
 
+    @Column(name = "isActive")
     private boolean isActive;
 
     private String description;
 
+    @Column(name = "strengthBase")
     private String strengthBase;
 
     public boolean getIsActive(){
