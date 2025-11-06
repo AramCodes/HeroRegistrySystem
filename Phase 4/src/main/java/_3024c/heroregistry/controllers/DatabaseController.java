@@ -56,7 +56,7 @@ public class DatabaseController implements Initializable {
     private  TextField dbPass;
 
     @FXML
-    private static TextField dbTable;
+    private TextField dbTable;
 
     @FXML
     private TextField dbUser;
@@ -246,7 +246,7 @@ public class DatabaseController implements Initializable {
             return heroes;
         }
 
-        String table = dbTable.getText().trim().toLowerCase();
+        String table = DatabaseController.instance.dbTable.getText().trim().toLowerCase();
         if (table.isEmpty()) {
             DatabaseController.updateStatus("Table name cannot be empty.", false);
             return heroes;
@@ -304,7 +304,7 @@ public class DatabaseController implements Initializable {
             return;
         }
 
-        String table = dbTable.getText().trim().toLowerCase();
+        String table = DatabaseController.instance.dbTable.getText().trim().toLowerCase();
         if (table.isEmpty()) {
             DatabaseController.updateStatus("Table name cannot be empty.", false);
             return;
@@ -353,7 +353,7 @@ public class DatabaseController implements Initializable {
             return;
         }
 
-        String table = dbTable.getText().trim().toLowerCase();
+        String table = DatabaseController.instance.dbTable.getText().trim().toLowerCase();
         if (table.isEmpty()) {
             DatabaseController.updateStatus("Table name cannot be empty.", false);
             return;
@@ -415,7 +415,7 @@ public class DatabaseController implements Initializable {
             return;
         }
 
-        String table = dbTable.getText().trim().toLowerCase();
+        String table = DatabaseController.instance.dbTable.getText().trim().toLowerCase();
         if (table.isEmpty()) {
             DatabaseController.updateStatus("Table name cannot be empty.", false);
             return;
