@@ -56,8 +56,14 @@
 .connect{
     -fx-cursor: hand;
     -fx-background-radius: 50;
-
+    -fx-background-color:  #1f8f36;
+    -fx-opacity: .7;
 }
+
+.connect:hover{
+    -fx-opacity: 1;
+}
+
 
 .actionBtn{
     -fx-text-fill: white;

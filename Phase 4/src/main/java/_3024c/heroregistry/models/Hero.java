@@ -47,4 +47,8 @@ public class Hero {
         return isActive;
     }
 
+    public void setIsActive(boolean isActive){
+        this.isActive = isActive;
+    }
+
 }

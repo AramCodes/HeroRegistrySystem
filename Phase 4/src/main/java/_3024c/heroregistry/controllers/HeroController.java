@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("api/v1/heroes")
 public class HeroController {
 
-//    helpers
+     //    helpers
     private static void sanitizeHero(Hero hero) {
         if (hero == null) return;
 
@@ -85,12 +85,12 @@ public class HeroController {
         if (oldHero.getHeroHeadshot() != null) existingDocument.setHeroHeadshot(oldHero.getHeroHeadshot());
         existingDocument.setAge(oldHero.getAge());
         existingDocument.setRating(oldHero.getRating());
-        existingDocument.setActive(oldHero.getIsActive());
+        existingDocument.setIsActive(oldHero.getIsActive());
         if (oldHero.getDescription() != null) existingDocument.setDescription(oldHero.getDescription());
         if (oldHero.getStrengthBase() != null) existingDocument.setStrengthBase(oldHero.getStrengthBase());
 
         Hero saved = repository.save(existingDocument);
-        sanitizeHero(saved); // ensure returned object is safe
+        sanitizeHero(saved);
         return new ResponseEntity<>(saved, HttpStatus.OK);
 
     }

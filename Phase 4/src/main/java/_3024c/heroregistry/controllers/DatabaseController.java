@@ -1,5 +1,6 @@
 package _3024c.heroregistry.controllers;
 
+import _3024c.heroregistry.models.Hero;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
@@ -22,21 +23,22 @@ import javafx.util.Duration;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static _3024c.heroregistry.controllers.Controller.goToDb;
 /*
     This contains all the logic for the database page its startup and button clicks on it page
  */
-@Component
+
 public class DatabaseController implements Initializable {
+    public static DatabaseController instance;
+
     static String url = "";
     static String user = "";
     static String pass = "";
-    static String statement = "";
 
     @FXML
     private Button btnDash;
@@ -54,7 +56,7 @@ public class DatabaseController implements Initializable {
     private  TextField dbPass;
 
     @FXML
-    private TextField dbTable;
+    private static TextField dbTable;
 
     @FXML
     private TextField dbUser;
@@ -70,6 +72,13 @@ public class DatabaseController implements Initializable {
 
     @FXML
     private Text statusLabel;
+
+    // --- Database Connection ---
+    /*
+      This field will hold the active database connection
+      for the entire controller to use.
+    */
+    private static Connection dbConnection;
 
     @FXML
     void handleClicks(ActionEvent event) throws Exception {
@@ -88,12 +97,14 @@ public class DatabaseController implements Initializable {
         } else if (key.equals("btnData")) {
             goToDb(event);
         } else if (key.equals("connectBtn")) {
-            getConnection();
+            connectionToDatabase();
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        DatabaseController.instance = this;
 
         slider.setTranslateX(0);
         menuClose.setVisible(true);
@@ -128,11 +139,65 @@ public class DatabaseController implements Initializable {
     }
 
     /*
-    showDbStatus
-    this helper method simply hides and shows messages(errors or completions) on the announcement text field and auto-hides message after 15 sec.
-    the parameters are a message to be displayed and the success status which determines the color the text is outputted
-    the return type is void
-*/
+      Static utility method to safely update the UI status from any static context.
+      DatabaseController.updateStatus(...).
+     */
+    public static void updateStatus(String message, boolean success) {
+        if (instance != null) {
+            instance.showDbStatus(message, success);
+        } else {
+            System.err.println("DB Status Update attempted before controller initialized: " + message);
+        }
+    }
+
+    /*
+        connectionToDatabase()
+        This method attempts to establish a connection to the database
+        and stores it in the `dbConnection` instance field.
+    */
+    @FXML
+    public void connectionToDatabase() {
+        url = "jdbc:mysql://localhost:3306/" + dbName.getText().trim();
+        user = dbUser.getText().trim();
+        pass = dbPass.getText().trim();
+
+        try {
+            // Check if a connection is already open and close it if so
+            if (dbConnection != null && !dbConnection.isClosed()) {
+                dbConnection.close();
+                System.out.println("Closed previous connection.");
+            }
+
+            dbConnection = DriverManager.getConnection(url, user, pass);
+            showDbStatus("Connected successfully!", true);
+
+        } catch (SQLException e) {
+            dbConnection = null;
+            showDbStatus("Database connection failed: " + e.getMessage(), false);
+        }
+    }
+
+    /*
+        Closes the database connection if it is open.
+        This is crucial for preventing memory leaks.
+    */
+    public void closeConnection() {
+        try {
+            if (dbConnection != null && !dbConnection.isClosed()) {
+                dbConnection.close();
+                System.out.println("Database connection closed.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error closing database connection: " + e.getMessage());
+        }
+    }
+
+    /*
+        showDbStatus
+        this helper method simply hides and shows messages(errors or completions) on the announcement text field and auto-hides message after 15 sec.
+        the parameters are a message to be displayed and the success status which determines the color the text is outputted
+        the return type is void
+    */
     private void showDbStatus(String msg, boolean success) {
         statusLabel.setText(msg);
         statusLabel.setStyle(
@@ -148,28 +213,233 @@ public class DatabaseController implements Initializable {
         hide.playFromStart();
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     /*
-        getConnection()
-        this method connect the DB to the app
-        there are no parameters
-        the return type is void
+        performRead()
+        Read operation for database.
+        This method uses the stored `dbConnection` to run a query.
+        The return type is a list of Heroes
     */
     @FXML
-    public Connection getConnection() {
-        url = "jdbc:mysql://localhost:3306/" + dbName.getText().trim();
-        user = dbUser.getText();
-        pass = dbPass.getText();
-        statement = "select * from " + dbTable.getText().trim();
+    public static List<Hero> performRead() {
+        List<Hero> heroes = new ArrayList<>();
 
         try {
+            if (dbConnection == null || dbConnection.isClosed()) {
+                DatabaseController.updateStatus("Not connected to database.", false);
+                return heroes;
+            }
+        } catch (SQLException e) {
+            DatabaseController.updateStatus("Error checking connection: " + e.getMessage(), false);
+            return heroes;
+        }
 
-            Connection connection = DriverManager.getConnection(url, user, pass);
-            showDbStatus("Connected successfully!", true);
-            return connection;
+        String table = dbTable.getText().trim().toLowerCase();
+        if (table.isEmpty()) {
+            DatabaseController.updateStatus("Table name cannot be empty.", false);
+            return heroes;
+        }
+
+        String sql = "SELECT * FROM " + table;
+
+
+        try (Statement stmt = dbConnection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                Long id = rs.getLong("id");
+                String heroName = rs.getString("hero_name");
+                String realName = rs.getString("real_name");
+                String heroHeadshot = rs.getString("hero_headshot");
+                int age = rs.getInt("age");
+                double rating = rs.getDouble("rating");
+                boolean isActive = rs.getBoolean("is_active");
+                String description = rs.getString("description");
+                String strengthBase = rs.getString("strength_base");
+
+                Hero hero = new Hero(
+                        id, heroName, realName, heroHeadshot, age, rating,
+                        isActive, description, strengthBase
+                );
+
+                heroes.add(hero);
+            }
+
+            DatabaseController.updateStatus("Successfully read data from " + table, true);
 
         } catch (SQLException e) {
-            showDbStatus("Database connection failed: " + e.getMessage(), false);
+            DatabaseController.updateStatus("Error reading data: " + e.getMessage(), false);
         }
-        return null;
+
+        return heroes;
+    }
+
+    /*
+        performCreate()
+        Create operation for database.
+        This method uses the stored `dbConnection` to run a query.This uses PreparedStatement to safely insert data.
+        The parameter is hero. This hero object avoids using Id to not confuse the mySQL/Jakarta Blend into thinking this is an update
+    */
+    public static void performCreate(Hero hero) {
+
+        try {
+            if (dbConnection == null || dbConnection.isClosed()) {
+                DatabaseController.updateStatus("Not connected to database.", false);
+                return;
+            }
+        } catch (SQLException e) {
+            DatabaseController.updateStatus("Error checking connection: " + e.getMessage(), false);
+            return;
+        }
+
+        String table = dbTable.getText().trim().toLowerCase();
+        if (table.isEmpty()) {
+            DatabaseController.updateStatus("Table name cannot be empty.", false);
+            return;
+        }
+
+        String sql = "INSERT INTO " + table + " (hero_name, real_name, hero_headshot, age, rating, is_active, description, strength_base) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+
+        try (PreparedStatement pstmt = dbConnection.prepareStatement(sql)) {
+
+            pstmt.setString(1, hero.getHeroName());
+            pstmt.setString(2, hero.getRealName());
+            pstmt.setString(3, hero.getHeroHeadshot());
+            pstmt.setInt(4, hero.getAge());
+            pstmt.setDouble(5, hero.getRating());
+            pstmt.setBoolean(6, hero.getIsActive());
+            pstmt.setString(7, hero.getDescription());
+            pstmt.setString(8, hero.getStrengthBase());
+
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                DatabaseController.updateStatus("Successfully created new hero!", true);
+            }
+
+        } catch (SQLException e) {
+            DatabaseController.updateStatus("Error creating record: " + e.getMessage(), false);
+        }
+    }
+
+    /*
+      performUpdate()
+      Update operation for database.
+      This method uses the stored `dbConnection` to run a query. This uses PreparedStatement to safely update data.
+      the parameter is id, The ID of the record to update
+     */
+    public static void performUpdate(Hero hero) {
+
+        try {
+            if (dbConnection == null || dbConnection.isClosed()) {
+                DatabaseController.updateStatus("Not connected to database.", false);
+                return;
+            }
+        } catch (SQLException e) {
+            DatabaseController.updateStatus("Error checking connection: " + e.getMessage(), false);
+            return;
+        }
+
+        String table = dbTable.getText().trim().toLowerCase();
+        if (table.isEmpty()) {
+            DatabaseController.updateStatus("Table name cannot be empty.", false);
+            return;
+        }
+
+        String sql = "UPDATE " + table + " SET "
+                + "hero_name = ?, "
+                + "real_name = ?, "
+                + "hero_headshot = ?, "
+                + "age = ?, "
+                + "rating = ?, "
+                + "is_active = ?, "
+                + "description = ?, "
+                + "strength_base = ? "
+                + "WHERE id = ?";
+
+        try (PreparedStatement pstmt = dbConnection.prepareStatement(sql)) {
+
+            pstmt.setString(1, hero.getHeroName());
+            pstmt.setString(2, hero.getRealName());
+            pstmt.setString(3, hero.getHeroHeadshot());
+            pstmt.setInt(4, hero.getAge());
+            pstmt.setDouble(5, hero.getRating());
+            pstmt.setBoolean(6, hero.getIsActive());
+            pstmt.setString(7, hero.getDescription());
+            pstmt.setString(8, hero.getStrengthBase());;
+            pstmt.setLong(9, hero.getId());
+
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                DatabaseController.updateStatus("Successfully updated record " + hero.getId(), true);
+
+            } else {
+                DatabaseController.updateStatus("No record found with ID " + hero.getId(), false);
+            }
+
+        } catch (SQLException e) {
+            DatabaseController.updateStatus("Error updating record: " + e.getMessage(), false);
+        }
+    }
+
+    /*
+        performDelete()
+        An example CRUD (Delete) operation.
+        This uses PreparedStatement to safely delete data.
+        The parameter of id is the ID of the record to delete
+        The method returns void upon completion
+     */
+    public static void performDelete(Long id) {
+
+        try {
+            if (dbConnection == null || dbConnection.isClosed()) {
+                DatabaseController.updateStatus("Not connected to database.", false);
+                return;
+            }
+        } catch (SQLException e) {
+            DatabaseController.updateStatus("Error checking connection: " + e.getMessage(), false);
+            return;
+        }
+
+        String table = dbTable.getText().trim().toLowerCase();
+        if (table.isEmpty()) {
+            DatabaseController.updateStatus("Table name cannot be empty.", false);
+            return;
+        }
+
+
+        String sql = "DELETE FROM " + table + " WHERE id = ?";
+
+
+        try (PreparedStatement pstmt = dbConnection.prepareStatement(sql)) {
+
+            pstmt.setLong(1, id);
+
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                DatabaseController.updateStatus("Successfully deleted record " + id, true);
+                System.out.println("Deleted record " + id);
+            } else {
+                DatabaseController.updateStatus("No record found with ID " + id, false);
+            }
+
+        } catch (SQLException e) {
+            DatabaseController.updateStatus("Error deleting record: " + e.getMessage(), false);
+        }
     }
 }

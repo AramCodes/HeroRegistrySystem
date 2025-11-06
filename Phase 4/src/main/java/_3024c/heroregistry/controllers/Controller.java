@@ -26,7 +26,6 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -721,7 +720,7 @@ public class Controller implements Initializable {
                         .build();
 
                 heroes.set(loadedIndex, updated);
-                HeroController.updateHero(updated);
+                DatabaseController.performUpdate(updated);
 
                 heroesObs.set(loadedIndex, updated);
                 showHeroes(heroes);
@@ -824,7 +823,7 @@ public class Controller implements Initializable {
                 .strengthBase(strengthBase)
                 .build();
 
-        HeroController.saveHero(newHero);
+        DatabaseController.performCreate(newHero);
         heroes.add(newHero);
 
 
@@ -918,7 +917,7 @@ public class Controller implements Initializable {
             heroes.clear();
         }
 
-        heroes.addAll(HeroController.getHeroes());
+        heroes.addAll(DatabaseController.performRead());
 
         if (!heroes.isEmpty()){
             return heroes.size();
@@ -952,7 +951,7 @@ public class Controller implements Initializable {
 
         Hero removed = heroes.remove(idx);
         try {
-            HeroController.deleteHero(id);
+            DatabaseController.performDelete(id);
         } catch (Exception ex) {
             // rollback array if save to file fails
             heroes.add(idx, removed);
@@ -1077,7 +1076,7 @@ public class Controller implements Initializable {
             int dbSaved = 0, dbFailed = 0;
             for (Hero h : newlyParsed) {
                 try {
-                    HeroController.saveHero(h);
+                    DatabaseController.performCreate(h);
                     dbSaved++;
                 } catch (Exception ex) {
                     dbFailed++;
@@ -1192,7 +1191,7 @@ public class Controller implements Initializable {
     */
     public String addHero(Hero hero) {
         heroes.add(hero);
-        HeroController.saveHero(hero);
+        DatabaseController.performCreate(hero);
 
         return hero.getHeroName() + " has been added to the Hero Registry System";
     }
