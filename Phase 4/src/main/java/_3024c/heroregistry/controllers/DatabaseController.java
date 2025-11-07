@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -56,6 +57,12 @@ public class DatabaseController implements Initializable {
     private  TextField dbPass;
 
     @FXML
+    private  TextField dbPassText;
+
+    @FXML
+    private CheckBox checkBox;
+
+    @FXML
     private TextField dbTable;
 
     @FXML
@@ -80,6 +87,11 @@ public class DatabaseController implements Initializable {
     */
     private static Connection dbConnection;
 
+    /*    handleClicks()
+        This method handle the logic of all buttons on the db login page
+        the parameter is the action Event itself
+        there is no return void
+     */
     @FXML
     void handleClicks(ActionEvent event) throws Exception {
         Object src = event.getSource();
@@ -106,6 +118,8 @@ public class DatabaseController implements Initializable {
 
         DatabaseController.instance = this;
 
+        dbPassText.setVisible(false);
+
         slider.setTranslateX(0);
         menuClose.setVisible(true);
 
@@ -121,6 +135,20 @@ public class DatabaseController implements Initializable {
         };
 
         menuClose.setOnMouseClicked(toggleMenu);
+    }
+
+    @FXML
+    private void changeVisibility(ActionEvent event) {
+        if (checkBox.isSelected()) {
+            dbPassText.setText(dbPass.getText());
+            dbPassText.setVisible(true);
+            dbPass.setVisible(false);
+            return;
+        }
+        dbPass.setText(dbPassText.getText());
+        dbPass.setVisible(true);
+        dbPassText.setVisible(false);
+
     }
 
     /*
