@@ -720,7 +720,8 @@ public class Controller implements Initializable {
                         .build();
 
                 heroes.set(loadedIndex, updated);
-                DatabaseController.performUpdate(updated);
+                //DatabaseController.performUpdate(updated);
+                HeroController.updateHero(updated); //
 
                 heroesObs.set(loadedIndex, updated);
                 showHeroes(heroes);
@@ -803,19 +804,16 @@ public class Controller implements Initializable {
         String description = nonEmpty(descriptionField.getText(), "Description", errors);
         String strengthBase = nonEmpty(strengthBaseField.getText(), "Strength base", errors);
 
-        if (id != null && heroes.stream().anyMatch(h -> Objects.equals(h.getId(), id))) {
-            errors.add("A hero with ID " + id + " already exists.");
-        }
-
         if (!errors.isEmpty()) {
             showAnnouncementCreate(String.join("\n", errors), false);
             return;
         }
 
+
         Hero newHero = Hero.builder()
                 .heroName(heroName)
                 .realName(realName)
-                .heroHeadshot("https://unsplash.com/" + heroName)
+                .heroHeadshot("https://unsplash.com/" + heroName.trim())
                 .age(age)
                 .rating(rating)
                 .isActive(isActive)
@@ -823,13 +821,21 @@ public class Controller implements Initializable {
                 .strengthBase(strengthBase)
                 .build();
 
-        DatabaseController.performCreate(newHero);
+        //Long newId = DatabaseController.performCreate(newHero);
+        HeroController.saveHero(newHero); //Api version can remove any line dealing with newID
+
+
+//        if (newId == null) {
+//            return;
+//        }
+//
+//
+//        newHero.setId(newId);//check
+
         heroes.add(newHero);
-
-
         heroesObs.add(newHero);
-        showHeroes(heroes);
 
+        showHeroes(heroes);
         showAnnouncementCreate("Created hero " + newHero.getHeroName() + " successfully.", true);
         clearInputs();
     }
@@ -918,6 +924,7 @@ public class Controller implements Initializable {
         }
 
         heroes.addAll(DatabaseController.performRead());
+       // heroes.addAll(HeroController.getHeroes()); API Version
 
         if (!heroes.isEmpty()){
             return heroes.size();
@@ -951,7 +958,8 @@ public class Controller implements Initializable {
 
         Hero removed = heroes.remove(idx);
         try {
-            DatabaseController.performDelete(id);
+            //DatabaseController.performDelete(id);
+            HeroController.deleteHero(id); //API version
         } catch (Exception ex) {
             // rollback array if save to file fails
             heroes.add(idx, removed);
@@ -1076,7 +1084,8 @@ public class Controller implements Initializable {
             int dbSaved = 0, dbFailed = 0;
             for (Hero h : newlyParsed) {
                 try {
-                    DatabaseController.performCreate(h);
+                    //DatabaseController.performCreate(h);
+                    HeroController.saveHero(h); //API Version
                     dbSaved++;
                 } catch (Exception ex) {
                     dbFailed++;
@@ -1191,7 +1200,8 @@ public class Controller implements Initializable {
     */
     public String addHero(Hero hero) {
         heroes.add(hero);
-        DatabaseController.performCreate(hero);
+    //    DatabaseController.performCreate(hero);
+       HeroController.saveHero(hero); //API Version of program
 
         return hero.getHeroName() + " has been added to the Hero Registry System";
     }

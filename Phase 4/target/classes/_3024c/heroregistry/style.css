@@ -49,10 +49,6 @@
     -fx-padding: 20 0 20 0;
 }
 
-#statusLabel{
-    -fx-background-color: white;
-}
-
 .connect{
     -fx-cursor: hand;
     -fx-background-radius: 50;

@@ -18,10 +18,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.springframework.stereotype.Component;
 
 import java.net.URL;
 import java.sql.*;
@@ -78,7 +76,7 @@ public class DatabaseController implements Initializable {
     private AnchorPane slider;
 
     @FXML
-    private Text statusLabel;
+    private Label statusLabel;
 
     // --- Database Connection ---
     /*
@@ -241,19 +239,6 @@ public class DatabaseController implements Initializable {
         hide.playFromStart();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     /*
         performRead()
         Read operation for database.
@@ -320,28 +305,28 @@ public class DatabaseController implements Initializable {
         This method uses the stored `dbConnection` to run a query.This uses PreparedStatement to safely insert data.
         The parameter is hero. This hero object avoids using Id to not confuse the mySQL/Jakarta Blend into thinking this is an update
     */
-    public static void performCreate(Hero hero) {
+    public static long performCreate(Hero hero) {
 
         try {
             if (dbConnection == null || dbConnection.isClosed()) {
                 DatabaseController.updateStatus("Not connected to database.", false);
-                return;
+                return 0;
             }
         } catch (SQLException e) {
             DatabaseController.updateStatus("Error checking connection: " + e.getMessage(), false);
-            return;
+            return 0;
         }
 
         String table = DatabaseController.instance.dbTable.getText().trim().toLowerCase();
         if (table.isEmpty()) {
             DatabaseController.updateStatus("Table name cannot be empty.", false);
-            return;
+            return 0;
         }
 
         String sql = "INSERT INTO " + table + " (hero_name, real_name, hero_headshot, age, rating, is_active, description, strength_base) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
 
-        try (PreparedStatement pstmt = dbConnection.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = dbConnection.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, hero.getHeroName());
             pstmt.setString(2, hero.getRealName());
@@ -355,12 +340,22 @@ public class DatabaseController implements Initializable {
             int rowsAffected = pstmt.executeUpdate();
 
             if (rowsAffected > 0) {
-                DatabaseController.updateStatus("Successfully created new hero!", true);
+
+
+                try (java.sql.ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        DatabaseController.updateStatus("Successfully created new hero!", true);
+                        return generatedKeys.getLong(1);
+                    } else {
+                        DatabaseController.updateStatus("Creating hero failed, no ID obtained.",false);
+                    }
+                }
             }
 
         } catch (SQLException e) {
             DatabaseController.updateStatus("Error creating record: " + e.getMessage(), false);
         }
+        return 0;
     }
 
     /*
