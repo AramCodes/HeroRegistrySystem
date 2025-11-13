@@ -28,8 +28,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import static _3024c.heroregistry.controllers.Controller.goToDb;
-/*
-    This contains all the logic for the database page its startup and button clicks on it page
+
+/**
+*    This contains all the logic for the database page its startup and button clicks on it page
  */
 
 public class DatabaseController implements Initializable {
@@ -78,18 +79,18 @@ public class DatabaseController implements Initializable {
     @FXML
     private Label statusLabel;
 
-    // --- Database Connection ---
-    /*
-      This field will hold the active database connection
-      for the entire controller to use.
+    /**
+    *           --- Database Connection ---
+    *  This field will hold the active database connection
+    *  for the entire controller to use.
     */
     private static Connection dbConnection;
 
-    /*    handleClicks()
-        This method handle the logic of all buttons on the db login page
-        the parameter is the action Event itself
-        there is no return void
-     */
+    /**    handleClicks()
+    *    This method handle the logic of all buttons on the db login page
+    *    the parameter is the action Event itself
+    *    there is no return void
+    **/
     @FXML
     void handleClicks(ActionEvent event) throws Exception {
         Object src = event.getSource();
@@ -111,6 +112,16 @@ public class DatabaseController implements Initializable {
         }
     }
 
+    /**
+     * This is required to initialize all FXML pages and connect controllers
+     * @param url
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resourceBundle
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -135,6 +146,7 @@ public class DatabaseController implements Initializable {
         menuClose.setOnMouseClicked(toggleMenu);
     }
 
+//    password toggle on the db pg
     @FXML
     private void changeVisibility(ActionEvent event) {
         if (checkBox.isSelected()) {
@@ -149,12 +161,12 @@ public class DatabaseController implements Initializable {
 
     }
 
-    /*
-    goToDash()
-    this method goes to the main dashboard
-    the parameter is the action event object
-    the return type is void
-*/
+    /**
+    *    goToDash()
+    *    this method goes to the main dashboard
+    *    the parameter is the action event object
+    *    the return type is void
+    **/
     public static void goToDash(ActionEvent event) throws Exception {
         FXMLLoader loader = new FXMLLoader(DatabaseController.class.getResource("/_3024c/heroregistry/Dashboard.fxml"));
         Parent root = loader.load();
@@ -164,10 +176,10 @@ public class DatabaseController implements Initializable {
         stage.show();
     }
 
-    /*
-      Static utility method to safely update the UI status from any static context.
-      DatabaseController.updateStatus(...).
-     */
+    /**
+    *  Static utility method to safely update the UI status from any static context.
+    *  DatabaseController.updateStatus(...).
+    **/
     public static void updateStatus(String message, boolean success) {
         if (instance != null) {
             instance.showDbStatus(message, success);
@@ -176,10 +188,10 @@ public class DatabaseController implements Initializable {
         }
     }
 
-    /*
-        connectionToDatabase()
-        This method attempts to establish a connection to the database
-        and stores it in the `dbConnection` instance field.
+    /**
+    *    connectionToDatabase()
+    *    This method attempts to establish a connection to the database
+    *    and stores it in the `dbConnection` instance field.
     */
     @FXML
     public void connectionToDatabase() {
@@ -203,9 +215,9 @@ public class DatabaseController implements Initializable {
         }
     }
 
-    /*
-        Closes the database connection if it is open.
-        This is crucial for preventing memory leaks.
+    /**
+    *    Closes the database connection if it is open.
+    *    This is crucial for preventing memory leaks.
     */
     public void closeConnection() {
         try {
@@ -239,12 +251,12 @@ public class DatabaseController implements Initializable {
         hide.playFromStart();
     }
 
-    /*
-        performRead()
-        Read operation for database.
-        This method uses the stored `dbConnection` to run a query.
-        The return type is a list of Heroes
-    */
+    /**
+    *    performRead()
+    *    Read operation for database.
+    *    This method uses the stored `dbConnection` to run a query. This uses PreparedStatement to read
+    *    @return the list type is a list of Heroes from the DB
+    **/
     @FXML
     public static List<Hero> performRead() {
         List<Hero> heroes = new ArrayList<>();
@@ -299,12 +311,13 @@ public class DatabaseController implements Initializable {
         return heroes;
     }
 
-    /*
-        performCreate()
-        Create operation for database.
-        This method uses the stored `dbConnection` to run a query.This uses PreparedStatement to safely insert data.
-        The parameter is hero. This hero object avoids using Id to not confuse the mySQL/Jakarta Blend into thinking this is an update
-    */
+    /**
+    *    performCreate()
+    *    Create operation for database.
+    *    This method uses the stored `dbConnection` to run a query.This uses PreparedStatement to safely insert data.
+    *    @param hero This hero object avoids using Id to not confuse the mySQL/Jakarta Blend into thinking this is an update
+    *    @return a long of the id that was generated by the DBMS to be added to the record of the newly created record
+    **/
     public static long performCreate(Hero hero) {
 
         try {
@@ -358,12 +371,12 @@ public class DatabaseController implements Initializable {
         return 0;
     }
 
-    /*
-      performUpdate()
-      Update operation for database.
-      This method uses the stored `dbConnection` to run a query. This uses PreparedStatement to safely update data.
-      the parameter is id, The ID of the record to update
-     */
+    /**
+    *  performUpdate()
+    *  Update operation for database.
+    *  This method uses the stored `dbConnection` to run a query. This uses PreparedStatement to safely update data.
+    *  @param hero the parameter is hero, The Object of the record to update*
+    **/
     public static void performUpdate(Hero hero) {
 
         try {
@@ -419,13 +432,12 @@ public class DatabaseController implements Initializable {
         }
     }
 
-    /*
-        performDelete()
-        An example CRUD (Delete) operation.
-        This uses PreparedStatement to safely delete data.
-        The parameter of id is the ID of the record to delete
-        The method returns void upon completion
-     */
+    /**
+    *    performDelete()
+    *    An example CRUD (Delete) operation.
+    *    This method uses a PreparedStatement to safely delete data. from database
+    *   @param id The parameter of id is the ID of the record to delete
+     **/
     public static void performDelete(Long id) {
 
         try {

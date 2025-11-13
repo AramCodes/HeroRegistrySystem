@@ -6,10 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/*
-This is the main data the application will be centered around
-
- */
+/**
+* This is the main data the application will be centered around
+*/
 @Entity
 @Table(name = "heroes")
 @Data

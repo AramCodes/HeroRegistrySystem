@@ -38,9 +38,9 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
 
-/*
-    This class contains all the logic for the dash page its startup and button clicks on it. This serves as the main class containing all the logic behind
-    the functionality
+ /**
+ *    This class contains all the logic for the dash page its startup and button clicks on it. This serves as the main class containing all the logic behind
+ *    the functionality
  */
 @Component
 public class Controller implements Initializable {
@@ -248,12 +248,12 @@ public class Controller implements Initializable {
 
     @FXML TableColumn<Hero, String>  strengthBase1;
 
-    /*
-        initialize()
-        this overridden and necessary method helps to set the stage to wanted values and set important rules
-        the parameter is the url to the fxml page and the resourceBundle are key value pair loaded from .yaml
-        or .properties page
-        the return type is void
+    /**
+    *    initialize()
+    *    this overridden and necessary method helps to set the stage to wanted values and set important rules
+    *    the parameter is the url to the fxml page and the resourceBundle are key value pair loaded from .yaml
+    *    or .properties page
+    *    the return type is void
     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -625,10 +625,10 @@ public class Controller implements Initializable {
     }
 
     /*
-        handleActions()
-        this method dispatches the correct actions via event object and a switch case
-        the parameter is the action event
-        the return type is void
+    *    handleActions()
+    *    this method dispatches the correct actions via event object and a switch case
+    *    event the parameter is the action event
+    *    the return type is void
     */
     @FXML
     private void handleActions(ActionEvent event){
@@ -753,11 +753,11 @@ public class Controller implements Initializable {
         }
     }
 
-    /*
-    getAttributes() //for update
-    this method allow the selection of an object's attributes through mose click on the selected table view
-    the parameter is the mouse event
-    the return type is void
+    /**
+    *    getAttributes() //for update
+    *    this method allow the selection of an object's attributes through mose click on the selected table view
+    *    the parameter is the mouse event
+    *    the return type is void
     */
     @FXML
     void getAttributes(MouseEvent event) {
@@ -770,11 +770,11 @@ public class Controller implements Initializable {
         fieldId.setText(id.getCellData(index).toString());
     }
 
-    /*
-        getAttribute() //for delete
-        this method allow the selection of an object's attributes through mose click on the selected table view
-        the parameter is the mouse event
-        the return type is void
+    /**
+    *    getAttribute() //for delete
+    *    this method allow the selection of an object's attributes through mouse click on the selected table view
+    *    the parameter is the mouse event
+    *    the return type is void
     */
     @FXML
     void getAttribute(MouseEvent event) {
@@ -787,11 +787,11 @@ public class Controller implements Initializable {
         searchBar.setText(id1.getCellData(index).toString());
     }
 
-    /*
-        createHero()
-        this method creates a heroe object and places it in heroes table then change the db
-        the parameter is the action event
-        the return type is void
+    /**
+    *    createHero()
+    *    this method creates a hero object and places it in heroes table then change the db
+    *    @ param the parameter is the action event
+    *    the return type is void
     */
     public void createHero(ActionEvent event) {
         List<String> errors = new ArrayList<>();
@@ -841,11 +841,11 @@ public class Controller implements Initializable {
     }
 
 
-    /*
-        showHeroes()
-        this method takes in a list of Hero types and make them visible on fx tables
-        the parameter is a list of Heroes
-        the return type is void
+    /**
+    *    showHeroes()
+    *    this method takes in a list of Hero types and make them visible on fx tables
+    * @param heroes the parameter is a list of Heroes
+    *    the return type is void
     */
     public void showHeroes(List<Hero> heroes) {
         heroTable.setItems(FXCollections.observableArrayList(heroes));
@@ -854,11 +854,12 @@ public class Controller implements Initializable {
         thirdTable.setItems(FXCollections.observableArrayList(heroes));
     }
 
-    /*
-        goToDb()
-        this method goes to the database login page
-        the parameter is the action event object
-        the return type is void
+    /**
+    *    goToDb()
+    *    this method goes to the database login page
+    *    the parameter is the action event object
+    *    the return type is void
+    *    @throws Exception can throw exception if file isn't found or loaded.
     */
     public static void goToDb(ActionEvent event) throws Exception {
         FXMLLoader loader = new FXMLLoader(Controller.class.getResource("/_3024c/heroregistry/Database.fxml"));
@@ -869,11 +870,11 @@ public class Controller implements Initializable {
         stage.show();
     }
 
-    /*
-        getAverageRating()
-        this method sums all the rating data and divides it by the total number of heroes
-        there is not a parameter on this method
-        the return type is double which returns is the average waiting
+    /**
+    *    getAverageRating()
+    *    this method sums all the rating data and divides it by the total number of heroes
+    *    there is not a parameter on this method
+    *    @return the return type is double which returns is the average waiting
     */
     public double getAverageRating() {
         double total = 00.00;
@@ -888,12 +889,12 @@ public class Controller implements Initializable {
         return total / heroes.size();
     }
 
-    /*
-        displayAllHeroes
-        (in the heroes list)
-        this method prints all heroes to the screen.
-        there are no parameters needed for this method
-        the return type is int, a 1 if it is successful
+    /**
+    *    displayAllHeroes
+    *    (in the heroes list)
+    *    this method prints all heroes to the screen.
+    *    there are no parameters needed for this method
+    * @return   the return type is int, a 1 if it is successful
     */
 
     public int displayAllHeroes(){
@@ -909,13 +910,13 @@ public class Controller implements Initializable {
         return 1;
     }
 
-        /*
-       copyHeroesFromOriginal
-       (file to list)
-       this method makes sure that the data in the original file is inside heroes List. Used before mutations to maintain the order of data
-       and update chosen source of truth(temporary heroes' list until Db).
-       there are no parameters needed for this method
-       the return type is int, will return int of total records
+    /**
+    *   copyHeroesFromOriginal
+    *   (file to list) -> (Db to List)
+    *   this method makes sure that the data in the original file is inside heroes List. Used before mutations to maintain the order of data
+    *   and update chosen source of truth(temporary heroes' list until Db).
+    *   there are no parameters needed for this method
+    *  @return the return type is int, will return int of total records
    */
 
     public int copyHeroesFromOriginal() {
@@ -933,12 +934,12 @@ public class Controller implements Initializable {
         return 0;
     }
 
-    /*
-        heroDelete
-        this method searches Heroes for matching id  and removes if found then uses fileWrite to reflect
-        deletion in text file.
-        there is a parameter of id this method
-        the return type is void
+    /**
+    *    heroDelete
+    *    this method searches Heroes for matching id  and removes if found then uses fileWrite to reflect
+    *    deletion in text file.
+    *    @param id there is a parameter of id this method
+    *    the return type is void
     */
 
     public boolean heroDelete(long id) {
@@ -975,11 +976,11 @@ public class Controller implements Initializable {
         return true;
     }
 
-        /*
-        isSevenDigitAndLong
-        this method simply verifies that the number in it is a seven digit long(id format)
-        the parameter is a long called id
-        the return type is boolean, will return true if it is valid false if not
+    /**
+    *    isSevenDigitAndLong
+    *    this method simply verifies that the number in it is a seven digit long(id format)
+    *    @param id the parameter is a long called id
+    *    @return the return type is boolean, will return true if it is valid false if not
     */
 
     public boolean isSevenDigitAndLong(long id) {
@@ -987,11 +988,11 @@ public class Controller implements Initializable {
     }
 
 
-    /*
-        formatHeroRecord
-        this method simply converts the Hero Objects into the string format used in files.
-        the parameter is an object containing a heroes data
-        the return type is a String, will return converted data
+    /**
+    *    formatHeroRecord
+    *    this method simply converts the Hero Objects into the string format used in files.
+    *    @param hero the parameter is an object containing a heroes data
+    *    @return object to file formate the return type is a String, will return converted data
     */
 
     public String formatHeroRecord(Hero hero) {
@@ -1034,14 +1035,12 @@ public class Controller implements Initializable {
         hide.playFromStart();
     }
 
-    /*
-        batchUpload()
-        this method read and writes new records from input file to original db.
-        there are no parameters needed for this method
-        the return type is int, the amount of items added
+    /**
+    *    batchUpload()
+    *    this method read and writes new records from input file to original db.
+    *    @param importPath there is a parameter of import path
+    *    @return the return type is int, the amount of items added
     */
-
-
     public ImportResult batchUpload(Path importPath){
         Set<Hero> merged = new LinkedHashSet<>(heroes);
         List<Hero> newlyParsed = new ArrayList<>();
@@ -1101,11 +1100,11 @@ public class Controller implements Initializable {
         }
     }
 
-    /*
-        parseHeroFromLine
-        this method simply reads Hero data  and converts it into a hero object
-        the parameter is a single line
-        the return type is an Optional<Hero>, will return converted data
+    /**
+    *    parseHeroFromLine
+    *    this method simply reads Hero data  and converts it into a hero object
+    * @param line the parameter is a single line from the text file
+    * @return Optional<Hero> the return type is an Optional<Hero>, will return converted data
     */
 
     public Optional<Hero> parseHeroFromLine(String line){
@@ -1161,21 +1160,21 @@ public class Controller implements Initializable {
         hide.playFromStart();
     }
 
-    /*
-        ImportResult
-        this helper method simply tallies the result fed to it
-        the parameters are number of successfully imported lines, failed lines, and the exception object thrown
-        the return type is containing ok if truth and eror object if contains false.
-    */
+    /**
+    *    ImportResult
+    *    this helper method simply tallies the result fed to it
+    *   the parameters are number of successfully imported lines, failed lines, and the exception object thrown
+    *    the return type is containing ok if truth and eror object if contains false.
+    **/
     public record ImportResult(int imported, int skippedMalformed, Exception error) {
         boolean ok() { return error == null; }
     }
 
     /*
-    showAnnouncementCreate
-    this helper method simply hides and shows messages(errors or completions) on the announcement text field and auto-hides message after 5 sec.
-    the parameters are a message to be displayed and the success status which determines the color the text is outputted
-    the return type is void
+    *    showAnnouncementCreate
+    *    this helper method simply hides and shows messages(errors or completions) on the announcement text field and auto-hides message after 5 sec.
+    *    the parameters are a message to be displayed and the success status which determines the color the text is outputted
+    *    the return type is void
     */
     private void showAnnouncementCreate(String msg, boolean success) {
         announcement3.setText(msg);
@@ -1192,11 +1191,11 @@ public class Controller implements Initializable {
         hide.playFromStart();
     }
 
-    /*
-        addHero
-        this helper method simply takes in a built hero and places it in heroes array and writes array to file
-        the parameters are a message to be displayed and the success status which determines the color the text is outputted
-        the return type is void
+    /**
+    *    addHero
+    *    this helper method simply takes in a built hero and places it in heroes array and writes array to file
+    *    the parameters are a message to be displayed and the success status which determines the color the text is outputted
+    *    the return type is void
     */
     public String addHero(Hero hero) {
         heroes.add(hero);
@@ -1206,11 +1205,11 @@ public class Controller implements Initializable {
         return hero.getHeroName() + " has been added to the Hero Registry System";
     }
 
-    /*
-        makeHero
-        this helper method simply takes in all data points to build a hero
-        the parameters are all the 9 fields of a hero object
-        the return type is the built hero
+    /**
+    *    makeHero
+    *    this helper method simply takes in all data points to build a hero
+    *    @param id ... the parameters are all the 9 fields of a hero object
+    *    @return Hero the return type is the built hero
     */
     public Hero makeHero(long id, String heroName, String realName, String heroHeadshot, int age, double rating, boolean isActive, String description, String strengthBase) {
 

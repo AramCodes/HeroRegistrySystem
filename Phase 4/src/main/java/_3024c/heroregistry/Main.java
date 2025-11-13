@@ -12,6 +12,10 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 //Help from YouTube MVP Java "Integrating Spring Boot with JavaFX"
 @SpringBootApplication(proxyBeanMethods = false)
+
+/** This is the main class for launching the application containing most of the logic of launching
+ * the java Fx and the integration and dual launch of JavaFX and SpringBoot
+ */
 public class Main extends Application {
 
     private ConfigurableApplicationContext springContext;
@@ -19,16 +23,23 @@ public class Main extends Application {
 	double x = 0;
 	double y = 0;
 
-    /*  Main method
-        contains the logic to trigger the launch of the HRS
-        the parameter args takes in array of strings
-        the return type is void.
+    /**  Main method
+    *    contains the logic to set the stage and trigger the launch of the HRS
+    *    the parameter args takes in array of strings
+    *    the return type is void.
     */
     public static void main(String[] args) {
         launch(args);
     }
 
-	@Override
+    /**
+     * The start method is necessary for JavasFX
+     * @param primaryStage the primary stage for this application, onto which
+     * the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be
+     * primary stages.
+     */
+    @Override
 	public void start(Stage primaryStage) {
 		primaryStage.initStyle(StageStyle.UNDECORATED);
 
@@ -49,6 +60,11 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 
+
+    /**
+     * The init jerry rigs JavaFX and SpringBoot unto working together at the same time
+     * @throws Exception
+     */
     @Override
     public void init() throws Exception {
         springContext = SpringApplication.run(Main.class);
@@ -57,6 +73,9 @@ public class Main extends Application {
         rootNode =  fxmlLoader.load();
     }
 
+    /**
+     * Runs the context concurrently while avoiding collision
+     */
     @Override
     public void stop() {
         springContext.close();

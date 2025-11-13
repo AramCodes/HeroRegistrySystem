@@ -14,6 +14,10 @@ import java.util.List;
 
 @Controller
 @RequestMapping("api/v1/heroes")
+
+/**
+ * This class contains the controller for the hero objects.
+ */
 public class HeroController {
 
      //    helpers
@@ -43,11 +47,21 @@ public class HeroController {
     }
 
     private static HeroRepository repository = null;
+
+    /**
+     * constructor to inject dependency of repository to avoid deprecated autowired annotation
+     * @param repository
+     */
     public HeroController(HeroRepository repository) {
         this.repository = repository;
     }
 
     // Read
+
+    /**
+     * This method represents the main read functionality of the app
+     * @return a list containing all hero objects in the Db
+     */
     @GetMapping("/all")
     public static List<Hero> getHeroes(){
 
@@ -56,6 +70,12 @@ public class HeroController {
 
 
     //  Create
+
+    /**
+     * This method represents the main create functionality of the app
+     * @param hero is a hero Object that will be created
+     * @return the return is a combination of the object sent and the staus code received through the process
+     */
     @PostMapping("/save")
     public static ResponseEntity saveHero(@RequestBody Hero hero){
         sanitizeHero(hero);
@@ -65,7 +85,12 @@ public class HeroController {
 
 
     //Update
-    //PutMapping("/save")
+
+    /**
+     * This method represents the main update functionality of the app
+     * @param oldHero is an copy of the original document
+     * @return is a combination of the object sent and the staus code received through the process
+     */
     @PutMapping("/update")
     public static ResponseEntity updateHero(Hero oldHero){
         if (oldHero == null || oldHero.getId() == null) {
@@ -95,10 +120,12 @@ public class HeroController {
 
     }
 
-
-
-
     //Delete
+    /**
+     * This method represents the main delete functionality of the app
+     * @param heroId this id belongs to the hero that needs to be deleted.
+     * @return
+     */
     @DeleteMapping("/id/{heroId}")
     public static ResponseEntity<Void> deleteHero(@PathVariable Long heroId) {
         if (!repository.existsById(heroId)) {
