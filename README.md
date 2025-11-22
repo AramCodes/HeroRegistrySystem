@@ -3,7 +3,8 @@
 The **Hero Registry System** is a desktop application for managing a database of heroes used by Hero Centers around the world.  
 It provides a JavaFX graphical interface on top of a Java/Spring Boot & database-backed backend so staff can search, add, edit, and maintain a structured registry of heroes.
 
-> **Current build:** `hero2.0` (launchable JAR in the `src` folder)
+> <img width="700" height="600" alt="screen" src="https://github.com/user-attachments/assets/e4bcd88a-4053-4313-8e00-d4eeeacf92f9" />
+
 
 ---
 
@@ -87,3 +88,4 @@ Before you run a local copy, make sure you have:
 git clone https://github.com/<your-username>/hero-registry-system.git
 cd hero-registry-system
 ```
+
