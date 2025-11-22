@@ -3,7 +3,7 @@
 The **Hero Registry System** is a desktop application for managing a database of heroes used by Hero Centers around the world.  
 It provides a JavaFX graphical interface on top of a Java/Spring Boot & database-backed backend so staff can search, add, edit, and maintain a structured registry of heroes.
 
-> **Current build:** `hero2.0` (launchable JAR in the `src` folder)
+
 
 ---
 
@@ -16,7 +16,6 @@ It provides a JavaFX graphical interface on top of a Java/Spring Boot & database
     -   [1. Clone the repository](#1-clone-the-repository)
     -   [2. Import into IntelliJ IDEA](#2-import-into-intellij-idea)
     -   [3. Run from IntelliJ (Play button)](#3-run-from-intellij-play-button)
-    -   [4. Run the `hero2.0` JAR](#4-run-the-hero20-jar)
 -   [Database Configuration](#database-configuration)
 -   [Project Structure](#project-structure)
 -   [Common Issues & Troubleshooting](#common-issues--troubleshooting)
@@ -66,7 +65,7 @@ Before you run a local copy, make sure you have:
 3. **JavaFX support**
 
     - If using Maven with JavaFX dependencies defined in `pom.xml`, the libraries will be downloaded automatically.
-    - For manual JAR execution, you may need a JavaFX SDK and to set a `--module-path` (see [Run the `hero2.0` JAR](#4-run-the-hero20-jar)).
+    - For manual JAR execution, you may need a JavaFX SDK and to set a `--module-path`.
 
 4. **Database server (optional but recommended)**
 
@@ -87,3 +86,4 @@ Before you run a local copy, make sure you have:
 git clone https://github.com/<your-username>/hero-registry-system.git
 cd hero-registry-system
 ```
+
