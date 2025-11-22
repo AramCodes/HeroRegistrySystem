@@ -1,0 +1,90 @@
+.menuClose:hover{
+    -fx-cursor: hand;
+}
+
+.menuItem{
+    -fx-background-color: white;
+}
+
+.menuItem:hover{
+    -fx-border-color: #3fff00;
+    -fx-border-width: 0px 0px 10px 0px;
+    -fx-cursor: hand;
+}
+
+.sidebarItem{
+    -fx-text-fill: white;
+    -fx-background-color: #0A4969;
+    -fx-padding: 0 0 20 30;
+}
+
+.sidebarItem:hover {
+    -fx-background-color: #146886;
+    -fx-text-fill: #3fff00;
+    -fx-border-color: #3fff00;
+    -fx-border-width: 0 3 0 6;
+    -fx-border-style: solid;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-padding: 8 12 8 12;
+    -fx-cursor: hand;
+}
+
+.grid{
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 20;
+}
+
+.table-columns{
+    -fx-color: white;
+    -fx-font-weight: bold;
+}
+
+.table-titles text{
+    -fx-font-weight: bold;
+    -fx-padding: 10;
+}
+.searchbox{
+    -fx-padding: 20 0 20 0;
+}
+
+.connect{
+    -fx-cursor: hand;
+    -fx-background-radius: 50;
+    -fx-background-color:  #1f8f36;
+    -fx-opacity: .7;
+}
+
+.connect:hover{
+    -fx-opacity: 1;
+}
+
+
+.actionBtn{
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-background-color: #0A4969;
+    -fx-cursor: hand;
+}
+
+.upload {
+    -fx-background-color:#fff;
+    -fx-background-radius:8px;
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.5), 6,0,0,0);
+}
+
+.btn{
+    -fx-cursor: hand;
+}
+
+.exit{
+    -fx-opacity: .75;
+}
+
+.exit:hover{
+    -fx-cursor: hand;
+    -fx-opacity: 1;
+}
+
